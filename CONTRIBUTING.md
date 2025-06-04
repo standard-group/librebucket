@@ -1,6 +1,6 @@
-# Contributing to LibreBucket
+# Contributing to Librebucket
 
-Thank you for your interest in contributing to LibreBucket! We welcome contributions from the community to help improve this project.
+Thank you for your interest in contributing to Librebucket! We welcome contributions from the community to help improve this project.
 
 ## Code of Conduct
 
@@ -12,7 +12,7 @@ This project adheres to the [Contributor Covenant Code of Conduct](CODE_OF_CONDU
 2. **Clone** your fork locally:
 
    ```bash
-   git clone https://0xacab.org/techplayz32/librebucket.git
+   git clone https://github.com/standard-group/librebucket.git
    cd librebucket
    ```
 
@@ -24,7 +24,7 @@ This project adheres to the [Contributor Covenant Code of Conduct](CODE_OF_CONDU
 
 4. **Make your changes** and commit them with a descriptive message
 5. **Push** your changes to your fork
-6. Open a **merge request** to the `no-masters` branch
+6. Open a **merge request** to the `main` branch
 
 ## Development Setup
 
@@ -36,7 +36,7 @@ This project adheres to the [Contributor Covenant Code of Conduct](CODE_OF_CONDU
 ### Building
 
 ```bash
-go build -o librebucket cmd/librebucket/main.go
+go build -o librebucket main.go
 ```
 
 ### Running Tests
@@ -61,7 +61,7 @@ gofmt -s -w .
 - **Write tests** - New features should include tests
 - **Update documentation** - Update the README or other relevant documentation
 - **Squash commits** - Keep your commit history clean by squashing related commits
-- **Write good commit messages** - Follow the [Conventional Commits](https://www.conventionalcommits.org/), or preferably at least [How to Write a Git Commit Message](https://cbea.ms/git-commit/) specification
+- **Write good commit messages** - Follow the [Conventional Commits](https://www.conventionalcommits.org/), or preferably at least [How to Write a Git Commit Message](https://cbea.ms/git-commit/) specification. If you can't follow or bad memory, you can use Husky with Commitlint. Just use `npm install` and try to commit, it will point at your errors.
 
 ## Reporting Issues
 
@@ -79,4 +79,4 @@ We welcome feature requests! Please open an issue to discuss your idea before im
 
 ## License
 
-By contributing to LibreBucket, you agree that your contributions will be licensed under the [MIT License](LICENSE).
+By contributing to Librebucket, you agree that your contributions will be licensed under the [MIT License](LICENSE).
