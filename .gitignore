@@ -1,0 +1,86 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+librebucket
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+coverage.txt
+
+# Go workspace files
+go.work
+go.work.sum
+
+# IDE specific files
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+.cursor/
+.windsurf/
+.trae/
+# idk how much of these goofy ahh AI coding editors
+
+# Dependency directories (remove these if you're committing vendor)
+vendor/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+*~
+
+# Log files
+*.log
+logs/
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build output directories
+/build/
+/bin/
+/dist/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Node modules (for frontend components)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local data storage for development
+/data/
+
+# Any local Git repositories created during testing
+/repos/
+
+# Configuration files with sensitive information
+config.local.yaml
+config.dev.yaml
+secrets.yaml
+
+# Debug files
+__debug_bin
+
+users.db
