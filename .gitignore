@@ -6,6 +6,12 @@
 *.dylib
 librebucket
 
+# deps
+node_modules
+.husky
+package.json
+package-lock.json
+
 # Test binary, built with `go test -c`
 *.test
 
