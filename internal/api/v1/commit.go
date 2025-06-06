@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	"librebucket/internal/git"
@@ -31,19 +30,8 @@ func getCommitHistory(w http.ResponseWriter, r *http.Request) {
 	username := r.PathValue("username")
 	reponame := r.PathValue("reponame")
 
-	limitStr := r.URL.Query().Get("limit")
-	limit := 50 // Default limit
-	if limitStr != "" {
-		var err error
-		limit, err = strconv.Atoi(limitStr)
-		if err != nil {
-			http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
-			return
-		}
-	}
-
 	repoPath := getRepoPath(username, reponame)
-	commits, err := git.GetCommitHistory(repoPath, limit)
+	commits, err := git.GetCommitHistory(repoPath)
 	if err != nil {
 		http.Error(w, "Failed to get commit history: "+err.Error(), http.StatusInternalServerError)
 		return

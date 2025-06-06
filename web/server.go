@@ -12,7 +12,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"sync" // For concurrent I/O streams in Git service handlers
+	"sync"
 	"time"
 
 	"librebucket/internal/db"
@@ -27,7 +27,7 @@ func StartServer() {
 	withLogging := func(h http.HandlerFunc) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
 			start := time.Now()
-			// Only log the basic request information
+
 			log.Printf("%s %s %s", r.RemoteAddr, r.Method, r.URL.Path)
 			h(w, r)
 			log.Printf("Completed in %v", time.Since(start))
@@ -39,7 +39,7 @@ func StartServer() {
 	mux.Handle("/api/v1/users/", withLogging(userAPIKeyHandler)) // Catches /api/v1/users/{username}/apikeys
 	mux.Handle("/api/v1/git/create", withLogging(apiCreateRepoHandler))
 
-	// Serve static files (ensure they are correctly mapped)
+	// Serve static files
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	mux.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("static/css"))))
 	mux.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("static/js"))))
@@ -65,7 +65,6 @@ func StartServer() {
 func gitAndWebHandler(w http.ResponseWriter, r *http.Request) {
 	path := strings.Trim(r.URL.Path, "/")
 
-	// Handle root path
 	if path == "" {
 		http.ServeFile(w, r, "static/index.html")
 		return
@@ -74,7 +73,7 @@ func gitAndWebHandler(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(path, "/")
 	if len(parts) < 2 {
 		// Not enough parts for a /username/repo structure, serve index or 404
-		http.ServeFile(w, r, "static/index.html") // Fallback to index for invalid paths
+		http.ServeFile(w, r, "static/index.html") // Fallback
 		return
 	}
 
@@ -143,7 +142,6 @@ func gitAndWebHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // apiCreateRepoHandler handles POST /api/v1/git/create
-// apiCreateRepoHandler handles POST /api/v1/git/create
 func apiCreateRepoHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		writeJSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
@@ -207,7 +205,7 @@ func userRegisterHandler(w http.ResponseWriter, r *http.Request) {
 		writeJSONError(w, http.StatusBadRequest, "Invalid JSON or missing fields")
 		return
 	}
-	token, _ := GenerateToken() // Helper to generate API key
+	token, _ := GenerateToken()
 	user, err := db.CreateUser(req.Username, req.Password, req.IsAdmin, token)
 	if err != nil {
 		writeJSONError(w, http.StatusBadRequest, err.Error())
@@ -228,7 +226,6 @@ func userAPIKeyHandler(w http.ResponseWriter, r *http.Request) {
 		writeJSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
 	}
-	// Parse username from URL: /api/v1/users/{username}/apikeys
 	parts := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
 	if len(parts) != 5 || parts[2] != "users" || parts[4] != "apikeys" {
 		writeJSONError(w, http.StatusNotFound, "Not found")

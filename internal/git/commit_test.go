@@ -11,13 +11,10 @@ import (
 )
 
 func createTestRepoWithCommit(t *testing.T, dir string) (repoPath, commitHash string) {
-	repoPath = filepath.Join(dir, "repo.git")
-	if err := CreateRepo(repoPath, "testuser", true); err != nil {
-		t.Fatalf("CreateRepo failed: %v", err)
-	}
-	r, err := git.PlainOpen(repoPath)
+	repoPath = filepath.Join(dir, "repo")
+	r, err := git.PlainInit(repoPath, false)
 	if err != nil {
-		t.Fatalf("PlainOpen failed: %v", err)
+		t.Fatalf("PlainInit failed: %v", err)
 	}
 	wt, err := r.Worktree()
 	if err != nil {
@@ -33,7 +30,7 @@ func createTestRepoWithCommit(t *testing.T, dir string) (repoPath, commitHash st
 	}
 	commit, err := wt.Commit("initial commit", &git.CommitOptions{
 		Author: &object.Signature{
-			Name:  "Test User",
+			Name:  "Test.User",
 			Email: "test@example.com",
 			When:  time.Now(),
 		},
@@ -47,7 +44,7 @@ func createTestRepoWithCommit(t *testing.T, dir string) (repoPath, commitHash st
 func TestGetCommitHistory(t *testing.T) {
 	dir := t.TempDir()
 	repoPath, _ := createTestRepoWithCommit(t, dir)
-	commits, err := GetCommitHistory(repoPath, 10)
+	commits, err := GetCommitHistory(repoPath)
 	if err != nil {
 		t.Fatalf("GetCommitHistory failed: %v", err)
 	}

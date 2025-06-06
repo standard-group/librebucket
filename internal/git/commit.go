@@ -3,88 +3,76 @@ package git
 
 import (
 	"fmt"
-	"io"
 	"mime"
 	"path/filepath"
-	"strings"
 	"time"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
-	"github.com/go-git/go-git/v5/plumbing/format/diff"
 	"github.com/go-git/go-git/v5/plumbing/object"
 )
 
 // Commit represents a git commit with metadata
 type Commit struct {
-	Hash         string    `json:"hash"`
-	ShortHash    string    `json:"short_hash"`
-	Author       string    `json:"author"`
-	Email        string    `json:"email"`
-	Message      string    `json:"message"`
-	CreatedAt    time.Time `json:"created_at"`
-	ParentHashes []string  `json:"parent_hashes,omitempty"`
+	Hash           string
+	Author         string
+	AuthorEmail    string
+	Message        string
+	Committer      string
+	CommitterEmail string
+	AuthoredAt     time.Time
+	CommittedAt    time.Time
+	Parents        []string
+	Files          []CommitFile
 }
 
 // CommitFile represents a file changed in a commit
-// ContentType is set using the file extension
 type CommitFile struct {
-	Name        string `json:"name"`
-	Path        string `json:"path"`
-	Additions   int    `json:"additions"`
-	Deletions   int    `json:"deletions"`
-	Type        string `json:"type"`        // "added", "modified", "deleted"
-	ContentType string `json:"contentType"` // MIME type of the file
+	Path        string
+	ChangeType  string // e.g., "Added", "Modified", "Deleted"
+	ContentType string
 }
 
 // GetCommitHistory returns the commit history for a repository
-func GetCommitHistory(repoPath string, limit int) ([]Commit, error) {
+func GetCommitHistory(repoPath string) ([]*Commit, error) {
 	r, err := git.PlainOpen(repoPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open repository: %w", err)
 	}
 
-	// Get the HEAD reference
-	ref, err := r.Head()
+	headRef, err := r.Head()
 	if err != nil {
-		return nil, fmt.Errorf("failed to get HEAD reference: %w", err)
+		// If there's no HEAD, the repo is likely empty
+		return []*Commit{}, nil
 	}
 
-	// Get the commit object for the HEAD reference
-	cIter, err := r.Log(&git.LogOptions{From: ref.Hash()})
+	startCommit, err := r.CommitObject(headRef.Hash())
+	if err != nil {
+		return nil, fmt.Errorf("failed to get HEAD commit: %w", err)
+	}
+
+	cIter, err := r.Log(&git.LogOptions{From: startCommit.Hash})
 	if err != nil {
 		return nil, fmt.Errorf("failed to get commit history: %w", err)
 	}
 
-	var commits []Commit
-	count := 0
+	var commits []*Commit
 	err = cIter.ForEach(func(c *object.Commit) error {
-		if limit > 0 && count >= limit {
-			return io.EOF // Stop after reaching the limit
-		}
-
-		// Get parent hashes
-		parentHashes := []string{}
-		for _, parent := range c.ParentHashes {
-			parentHashes = append(parentHashes, parent.String())
-		}
-
-		commit := Commit{
-			Hash:         c.Hash.String(),
-			ShortHash:    c.Hash.String()[:7],
-			Author:       c.Author.Name,
-			Email:        c.Author.Email,
-			Message:      c.Message,
-			CreatedAt:    c.Author.When,
-			ParentHashes: parentHashes,
-		}
-		commits = append(commits, commit)
-		count++
+		commits = append(commits, &Commit{
+			Hash:           c.Hash.String(),
+			Author:         c.Author.Name,
+			AuthorEmail:    c.Author.Email,
+			Message:        c.Message,
+			Committer:      c.Committer.Name,
+			CommitterEmail: c.Committer.Email,
+			AuthoredAt:     c.Author.When,
+			CommittedAt:    c.Committer.When,
+			Parents:        getCommitParents(c),
+		})
 		return nil
 	})
-
-	if err != nil && err != io.EOF {
-		return nil, fmt.Errorf("error iterating commits: %w", err)
+	if err != nil {
+		return nil, fmt.Errorf("failed to iterate commit history: %w", err)
 	}
 
 	return commits, nil
@@ -97,32 +85,24 @@ func GetCommitByHash(repoPath, hash string) (*Commit, error) {
 		return nil, fmt.Errorf("failed to open repository: %w", err)
 	}
 
-	// Parse the hash
 	h := plumbing.NewHash(hash)
 
-	// Get the commit object
 	c, err := r.CommitObject(h)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get commit %s: %w", hash, err)
+		return nil, fmt.Errorf("failed to get commit object: %w", err)
 	}
 
-	// Get parent hashes
-	parentHashes := []string{}
-	for _, parent := range c.ParentHashes {
-		parentHashes = append(parentHashes, parent.String())
-	}
-
-	commit := &Commit{
-		Hash:         c.Hash.String(),
-		ShortHash:    c.Hash.String()[:7],
-		Author:       c.Author.Name,
-		Email:        c.Author.Email,
-		Message:      c.Message,
-		CreatedAt:    c.Author.When,
-		ParentHashes: parentHashes,
-	}
-
-	return commit, nil
+	return &Commit{
+		Hash:           c.Hash.String(),
+		Author:         c.Author.Name,
+		AuthorEmail:    c.Author.Email,
+		Message:        c.Message,
+		Committer:      c.Committer.Name,
+		CommitterEmail: c.Committer.Email,
+		AuthoredAt:     c.Author.When,
+		CommittedAt:    c.Committer.When,
+		Parents:        getCommitParents(c),
+	}, nil
 }
 
 // GetCommitChanges returns the files changed in a specific commit
@@ -164,11 +144,8 @@ func GetCommitChanges(repoPath, hash string) ([]CommitFile, error) {
 				contentType = "application/octet-stream"
 			}
 			changes = append(changes, CommitFile{
-				Name:        f.Name,
 				Path:        f.Name,
-				Additions:   0, // No comparison available
-				Deletions:   0, // No comparison available
-				Type:        "added",
+				ChangeType:  "added",
 				ContentType: contentType,
 			})
 			return nil
@@ -210,29 +187,15 @@ func GetCommitChanges(repoPath, hash string) ([]CommitFile, error) {
 				contentType = "application/octet-stream"
 			}
 
-			additions := 0
-			deletions := 0
-			for _, chunk := range filePatch.Chunks() {
-				if chunk.Type() == diff.Add {
-					additions += strings.Count(chunk.Content(), "\n")
-					if !strings.HasSuffix(chunk.Content(), "\n") {
-						additions++
-					}
-				} else if chunk.Type() == diff.Delete {
-					deletions += strings.Count(chunk.Content(), "\n")
-					if !strings.HasSuffix(chunk.Content(), "\n") {
-						deletions++
-					}
-				}
-			}
+			// TODO: Calculate additions and deletions
+			// filePatch.Chunks() contains hunk information
+			// Need to iterate through chunks and count lines based on type
 
 			changes = append(changes, CommitFile{
-				Name:        path,
 				Path:        path,
-				Additions:   additions,
-				Deletions:   deletions,
-				Type:        changeType,
+				ChangeType:  changeType,
 				ContentType: contentType,
+				// Additions and Deletions would go here
 			})
 		}
 	}
@@ -269,4 +232,13 @@ func GetFileAtCommit(repoPath, filePath, commitHash string) ([]byte, error) {
 	}
 
 	return []byte(content), nil
+}
+
+// getCommitParents extracts parent hashes from a commit object
+func getCommitParents(c *object.Commit) []string {
+	var parents []string
+	for _, p := range c.ParentHashes {
+		parents = append(parents, p.String())
+	}
+	return parents
 }

@@ -25,10 +25,19 @@ func TestCreateAndMetaRepo(t *testing.T) {
 		t.Errorf("RepoMeta mismatch: got %+v, want owner=%s, public=%v", meta, owner, public)
 	}
 
-	if !IsRepoOwner(repoPath, owner) {
+	ownerStatus, err := IsRepoOwner(repoPath, owner)
+	if err != nil {
+		t.Fatalf("IsRepoOwner failed: %v", err)
+	}
+	if !ownerStatus {
 		t.Errorf("IsRepoOwner failed: should be true for owner")
 	}
-	if !IsRepoPublic(repoPath) {
+
+	publicStatus, err := IsRepoPublic(repoPath)
+	if err != nil {
+		t.Fatalf("IsRepoPublic failed: %v", err)
+	}
+	if !publicStatus {
 		t.Errorf("IsRepoPublic failed: should be true for public repo")
 	}
 }
