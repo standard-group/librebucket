@@ -308,8 +308,10 @@ func handleGitInfoRefs(w http.ResponseWriter, r *http.Request, repoPath string) 
 
 	// Execute git command
 	// --stateless-rpc --advertise-refs is for smart HTTP protocol for info/refs
-	cmd := exec.Command("git", gitService, "--stateless-rpc", "--advertise-refs", repoPath)
-	cmd.Dir = repoPath // Ensure command runs in the repository's parent directory context if needed
+	// Pass the repository path relative to the working directory
+	cmd := exec.Command("git", gitService, "--stateless-rpc", "--advertise-refs", filepath.Base(repoPath))
+	// Change working directory to the parent of the repository path
+	cmd.Dir = filepath.Dir(repoPath)
 
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
@@ -379,13 +381,16 @@ func handleGitService(w http.ResponseWriter, r *http.Request, repoPath, service 
 	username := filepath.Base(filepath.Dir(repoPath)) // Extract username from repoPath
 	if !checkRepoAuth(r, repoPath, action, username) {
 		w.Header().Set("WWW-Authenticate", `Basic realm="LibreBucket"`)
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		// Send 401 Unauthorized without a body for git service requests
+		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
 	// Execute git command
-	cmd := exec.Command("git", gitServiceCmd, "--stateless-rpc", repoPath)
-	cmd.Dir = repoPath // Ensure command runs in the repository's parent directory context if needed
+	// Pass the repository path relative to the working directory
+	cmd := exec.Command("git", gitServiceCmd, "--stateless-rpc", filepath.Base(repoPath))
+	// Change working directory to the parent of the repository path
+	cmd.Dir = filepath.Dir(repoPath)
 
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
