@@ -1,4 +1,7 @@
 {
+  "name": "librebucket",
+  "version": "1.0.0",
+  "description": "<div style=\"background: #f0f0f0; padding: 20px; display: inline-block;\">\r    <img src=\"./docs/images/librebucket-logo.svg\">\r </div>",
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
@@ -6,5 +9,19 @@
   },
   "scripts": {
     "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/standard-group/librebucket.git"
+  },
+  "author": "standardgroup",
+  "license": "GPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/standard-group/librebucket/issues"
+  },
+  "homepage": "https://github.com/standard-group/librebucket#readme",
+  "dependencies": {
+    "golte": "^0.1.2",
+    "svelte": "^4.2.7"
   }
 }

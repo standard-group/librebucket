@@ -1,15 +1,15 @@
 <div style="background: #f0f0f0; padding: 20px; display: inline-block;">
-   <img src="./docs/images/librebucket-logo.svg">
+   <img src="./docs/images/new-librebucket-logo.svg">
 </div>
 
-# LibreBucket
+# Librebucket
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/standard-group/librebucket)](https://goreportcard.com/report/github.com/standard-group/librebucket)
-[![License: GPLv3 or later](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/gpl-3-0)
+[![License: GPLv3 or later](https://img.shields.io/badge/License-GPLv3-yellow.svg)](https://opensource.org/license/gpl-3-0)
 
 A lightweight, self-hosted Git server with a clean web interface, built with Go.
 
-Are you tired of big companies playing with your repositories, by removing them or trading with your data? Want to provide a small and free Git hosting for your community, friends or company? Then LibreBucket (*/ˈliːbrə ˈbʌkɪt/*) for you, we promise that LibreBucket will be **"independent Free/Libre Software forever"**!
+Are you tired of big companies playing with your repositories, by removing them or trading with your data? Want to provide a small and free Git hosting for your community, friends or company? Then Librebucket (*/ˈliːbrə ˈbʌkɪt/*) for you, we promise that Librebucket will be **"independent Free/Libre Software forever"**!
 
 ## Getting Started
 
@@ -17,7 +17,7 @@ Are you tired of big companies playing with your repositories, by removing them 
 
 - Go 1.22 or later
 - Git 2.20 or later
-- A Unix-like operating system (Linux, macOS, WSL on Windows)
+- A operating system (Linux, macOS, Windows, even Raspberry/Orange Pi!)
 
 ### Installation
 
