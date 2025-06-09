@@ -5,7 +5,6 @@ import (
 	"librebucket/web"
 	"log"
 	"os"
-	"os/exec"
 	"path/filepath"
 )
 
@@ -30,10 +29,10 @@ func main() {
 		return
 	}
 
-	if err := exec.Command("npx", "golte").Run(); err != nil {
-		log.Fatalf("Failed to build files for Svelte to work properly: %v. Please install Node.js and run npm install in this directory.", err)
-		return
-	}
+	// if err := exec.Command("npx", "golte").Run(); err != nil {
+	//	log.Fatalf("Failed to build files for Svelte to work properly: %v. Please install Node.js and run npm install in this directory.", err)
+	//	return
+	// }
 
 	dir, err := os.Getwd()
 	if err != nil {

@@ -38,8 +38,9 @@ func StartServer() {
 
 	// Serve static files
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	r.Handle("/css/*", http.StripPrefix("/css/", http.FileServer(http.Dir("static/css"))))
-	r.Handle("/js/*", http.StripPrefix("/js/", http.FileServer(http.Dir("static/js"))))
+	r.Handle("/css/*", http.StripPrefix("/css/", http.FileServer(http.Dir("static/components/css"))))
+	r.Handle("/js/*", http.StripPrefix("/js/", http.FileServer(http.Dir("static/components/js"))))
+	r.Handle("/img/*", http.StripPrefix("/img/", http.FileServer(http.Dir("static/components/img"))))
 
 	// Generic handler for root, repo pages, and Git HTTP services
 	r.Get("/", sveltigo.Page("components/page/home"))       // Assuming static/index.html becomes components/page/home.svelte
