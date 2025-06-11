@@ -4,7 +4,7 @@
 
 # Librebucket
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/standard-group/librebucket)](https://goreportcard.com/report/github.com/standard-group/librebucket)
+[![Go Report Card](https://goreportcard.com/badge/github.com/standard-group/librebucket)](https://goreportcard.com/report/github.com/standard-group/librebucket) 
 [![License: GPLv3 or later](https://img.shields.io/badge/License-GPLv3-yellow.svg)](https://opensource.org/license/gpl-3-0)
 
 A lightweight, self-hosted Git server with a clean web interface, built with Go.
