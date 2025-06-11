@@ -2,10 +2,6 @@
   // Add any necessary JavaScript here
 </script>
 
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
-</style>
-
 <!-- Header -->
 <header class="header">
   <div class="container">
@@ -16,7 +12,7 @@
         class="logo-icon"
       />
       <div class="logo"></div>
-      <div class="auth-links"> 
+      <div class="auth-links">
         <a href="/login">Log in / Register</a>
       </div>
     </div>
@@ -47,3 +43,7 @@
     </div>
   </div>
 </footer>
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+</style>
