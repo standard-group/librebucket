@@ -4,12 +4,18 @@ when i dont like something, so im sorry!!
 
 <script>
   let isDarkMode = true;
-  
+
   function toggleTheme() {
     isDarkMode = !isDarkMode;
   }
 
-  $: logoSrc = isDarkMode ? "img/new-librebucket-logo-white.svg" : "img/new-librebucket-logo.svg";
+  $: logoSrc = isDarkMode
+    ? "img/new-librebucket-logo-white.svg"
+    : "img/new-librebucket-logo.svg";
+
+  function goToLogin() {
+    window.location.href = "/login";
+  }
 </script>
 
 <svelte:head>
@@ -23,7 +29,7 @@ when i dont like something, so im sorry!!
         <img src={logoSrc} alt="Librebucket logo" />
       </div>
       <button class="theme-toggle" on:click={toggleTheme}>
-        {isDarkMode ? '☀️' : '🌙'}
+        {isDarkMode ? "☀️" : "🌙"}
       </button>
     </div>
   </header>
@@ -34,7 +40,9 @@ when i dont like something, so im sorry!!
         <div class="hero-content">
           <h1 class="main-title">Librebucket</h1>
           <p class="hero-subtitle">
-            Create the future, <a href="#" class="hero-link">commit after commit</a>
+            Create the future, <a href="#" class="hero-link"
+              >commit after commit</a
+            >
           </p>
           <p class="hero-description">
             Librebucket is a self-hosted lightweight software forge.
@@ -43,12 +51,17 @@ when i dont like something, so im sorry!!
             Easy to install and low maintenance, it just does the job.
           </p>
           <p class="instance-notice">
-            You are currently visiting an instance, means that we do not owned it
-            and, we are not <br />responsible for any things which on this forge.
+            You are currently visiting an instance, means that we do not owned
+            it and, we are not <br />responsible for any things which on this
+            forge.
           </p>
           <div class="button-group">
-            <button class="btn btn-primary">Join &amp; register</button>
-            <button class="btn btn-secondary">Log In</button>
+            <button class="btn btn-primary" href="/register"
+              >Join &amp; register</button
+            >
+            <button class="btn btn-secondary" on:click={goToLogin}
+              >Sign In</button
+            >
           </div>
         </div>
         <div class="hero-image">
@@ -129,7 +142,10 @@ when i dont like something, so im sorry!!
       <div class="footer-left">
         <p>Version: 0.0.0-debug</p>
         <p>This home page is running on Librebucket</p>
-        <p>Copyright © 2025 Librebucket authors. Content available under CC BY-SA 4.0.</p>
+        <p>
+          Copyright © 2025 Librebucket authors. Content available under CC
+          BY-SA 4.0.
+        </p>
         <p>Credit to the Forgejo's contributors for design inspiration.</p>
       </div>
       <div class="footer-right">
@@ -149,7 +165,7 @@ when i dont like something, so im sorry!!
     --secondary-orange-hover: #d66623;
     --danger-red: #e73434;
     --danger-red-hover: #d62323;
-    
+
     /* Dark theme */
     --dark-bg: #171e26;
     --dark-secondary-bg: #10161d;
@@ -157,7 +173,7 @@ when i dont like something, so im sorry!!
     --dark-text-primary: #ffffff;
     --dark-text-secondary: #ffffff66;
     --dark-border: #ffffff33;
-    
+
     /* Light theme */
     --light-bg: #ffffff;
     --light-secondary-bg: #f8f9fa;
@@ -165,7 +181,7 @@ when i dont like something, so im sorry!!
     --light-text-primary: #1a1a1a;
     --light-text-secondary: #666666;
     --light-border: #e0e0e0;
-    
+
     --gradient-blue: linear-gradient(90deg, #3487e7 0%, #205fa8 100%);
     --gradient-orange: linear-gradient(90deg, #e77634 0%, #cdb623 100%);
     --gradient-red: linear-gradient(90deg, #e73434 0%, #811d1d 100%);
@@ -179,7 +195,13 @@ when i dont like something, so im sorry!!
 
   .app {
     min-height: 100vh;
-    font-family: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family:
+      "Noto Sans",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      sans-serif;
     display: flex;
     flex-direction: column;
     transition: all 0.3s ease;
@@ -239,15 +261,18 @@ when i dont like something, so im sorry!!
   }
 
   .app.light .feature-item img {
-    filter: invert(20%) sepia(92%) saturate(879%) hue-rotate(187deg) brightness(97%) contrast(87%);
+    filter: invert(20%) sepia(92%) saturate(879%) hue-rotate(187deg)
+      brightness(97%) contrast(87%);
   }
 
   .app.light .footer img {
-    filter: invert(40%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(60%) contrast(100%);
+    filter: invert(40%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(60%)
+      contrast(100%);
   }
 
   .app.light .btn img {
-    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg)
+      brightness(100%) contrast(100%);
   }
 
   .header {
@@ -408,7 +433,8 @@ when i dont like something, so im sorry!!
   .btn img {
     width: 24px;
     height: 24px;
-    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg)
+      brightness(100%) contrast(100%);
   }
 
   .hero-image {
@@ -472,7 +498,8 @@ when i dont like something, so im sorry!!
   .feature-item img {
     width: 63px;
     height: 63px;
-    filter: invert(40%) sepia(92%) saturate(879%) hue-rotate(187deg) brightness(97%) contrast(87%);
+    filter: invert(40%) sepia(92%) saturate(879%) hue-rotate(187deg)
+      brightness(97%) contrast(87%);
     flex-shrink: 0;
   }
 
@@ -567,7 +594,8 @@ when i dont like something, so im sorry!!
   .footer-right img {
     width: 36px;
     height: 36px;
-    filter: invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%) contrast(100%);
+    filter: invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%)
+      contrast(100%);
   }
 
   @media (max-width: 1024px) {
@@ -575,7 +603,7 @@ when i dont like something, so im sorry!!
       grid-template-columns: 1fr;
       text-align: center;
     }
-    
+
     .hero-image {
       display: none;
     }
@@ -585,75 +613,75 @@ when i dont like something, so im sorry!!
     .main-content {
       padding: 1rem;
     }
-    
+
     .main-title,
     .section-title {
       font-size: 2.5rem;
       letter-spacing: -1px;
     }
-    
+
     .hero-section {
       padding: 2rem 0;
       min-height: auto;
     }
-    
+
     .hero-description,
     .contribute-description {
       font-size: 1.1rem;
       line-height: 1.6;
     }
-    
+
     .hero-subtitle {
       font-size: 1.4rem;
       line-height: 1.4;
     }
-    
+
     .instance-notice {
       font-size: 0.9rem;
       line-height: 1.5;
     }
-    
+
     .button-group {
       flex-direction: column;
       gap: 1rem;
       margin-top: 2rem;
     }
-    
+
     .btn {
       width: 100%;
       justify-content: center;
       padding: 20px 24px;
       font-size: 18px;
     }
-    
+
     .feature-grid {
       grid-template-columns: 1fr;
       gap: 2rem;
     }
-    
+
     .features-section {
       padding: 3rem 1.5rem;
       margin: 2rem 0;
     }
-    
+
     .contribute-section {
       padding: 3rem 0;
     }
-    
+
     .contribute-buttons {
       flex-direction: column;
       gap: 1rem;
       max-width: 400px;
       margin: 0 auto;
     }
-    
+
     .footer {
       height: auto;
       min-height: 200px;
       position: fixed;
       padding: 0;
     }
-    
+
     .footer-content {
       flex-direction: column;
       gap: 1.5rem;
@@ -663,37 +691,37 @@ when i dont like something, so im sorry!!
       justify-content: center;
       height: 100%;
     }
-    
+
     .footer-left {
       order: 2;
       align-items: center;
       gap: 0.4rem;
     }
-    
+
     .footer-left p {
       font-size: 13px;
       line-height: 1.4;
     }
-    
+
     .footer-right {
       order: 1;
       gap: 2rem;
       margin-bottom: 0.5rem;
     }
-    
+
     .footer-right img {
       width: 32px;
       height: 32px;
     }
-    
+
     .main {
       padding-bottom: 220px;
     }
-    
+
     .header-content {
       padding: 0 1rem;
     }
-    
+
     .theme-toggle {
       padding: 6px 10px;
       font-size: 16px;
@@ -704,39 +732,39 @@ when i dont like something, so im sorry!!
     .main-content {
       padding: 0.5rem;
     }
-    
+
     .main-title,
     .section-title {
       font-size: 2rem;
     }
-    
+
     .hero-subtitle {
       font-size: 1.2rem;
     }
-    
+
     .hero-description,
     .contribute-description {
       font-size: 1rem;
     }
-    
+
     .btn {
       padding: 18px 20px;
       font-size: 16px;
     }
-    
+
     .features-section,
     .contribute-section {
       padding: 2rem 1rem;
     }
-    
+
     .footer-content {
       padding: 1.5rem 0.5rem;
     }
-    
+
     .footer-left p {
       font-size: 12px;
     }
-    
+
     .main {
       padding-bottom: 200px;
     }

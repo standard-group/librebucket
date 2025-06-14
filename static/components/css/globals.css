@@ -24,7 +24,6 @@ a {
 }
 
 html {
-  /* Allow user zoom and proper scaling on mobile */
   min-width: 0;
   min-height: 0;
   width: 100vw;
@@ -44,15 +43,17 @@ body {
 }
 
 @media (max-width: 900px) {
-  html, body {
+
+  html,
+  body {
     width: 100vw;
     min-width: 0;
     overflow-x: hidden;
   }
 }
 
-/* Make sure the main container stretches to fill the viewport and is responsive */
-.TV, .div {
+.TV,
+.div {
   min-width: 0;
   min-height: 0;
   width: 100vw !important;
@@ -60,38 +61,53 @@ body {
   box-sizing: border-box;
 }
 
-/* Responsive font sizes and paddings for mobile */
 @media (max-width: 600px) {
-  .main-content-wrapper, .overlap, .overlap-6 {
+
+  .main-content-wrapper,
+  .overlap,
+  .overlap-6 {
     padding: 1rem !important;
   }
-  .text-wrapper, .text-wrapper-5, .text-wrapper-6 {
+
+  .text-wrapper,
+  .text-wrapper-5,
+  .text-wrapper-6 {
     font-size: 2rem !important;
     letter-spacing: -1px !important;
   }
+
   .feature-grid {
     grid-template-columns: 1fr !important;
     gap: 1rem !important;
   }
-  .footer-left, .footer-right {
+
+  .footer-left,
+  .footer-right {
     flex-direction: column !important;
     align-items: flex-start !important;
     gap: 0.5rem !important;
   }
-  .overlap-5, .overlap-9 {
+
+  .overlap-5,
+  .overlap-9 {
     height: auto !important;
     padding: 0.5rem 1rem !important;
   }
-  .div-wrapper, .overlap-7 {
+
+  .div-wrapper,
+  .overlap-7 {
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
   }
 }
 
-/* Remove white space on zoom and mobile */
 @media (max-width: 600px) {
-  html, body, .TV, .div {
+
+  html,
+  body,
+  .TV,
+  .div {
     width: 100vw !important;
     min-width: 0 !important;
     max-width: 100vw !important;
