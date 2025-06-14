@@ -1,108 +1,100 @@
-<script>More actions
-  // No script logic needed for this static page layout.
-  // This is a Svelte component file (.svelte).
+<!-- Hey you all, who checkin' this file, Im doing major rewrites, 
+when i dont like something, so im sorry!! 
+-->
+
+<script>
+  let isDarkMode = true;
+  
+  function toggleTheme() {
+    isDarkMode = !isDarkMode;
+  }
+
+  $: logoSrc = isDarkMode ? "img/new-librebucket-logo-white.svg" : "img/new-librebucket-logo.svg";
 </script>
 
-<div class="TV">
-  <header class="overlap-5">
+<svelte:head>
+  <title>Librebucket</title>
+</svelte:head>
+
+<div class="app" class:dark={isDarkMode} class:light={!isDarkMode}>
+  <header class="header">
     <div class="header-content">
-      <div class="new-librebucket-logo">
-        <img
-          src="img/new-librebucket-logo-white.svg"
-          alt="Librebucket logo part"
-        />
+      <div class="logo">
+        <img src={logoSrc} alt="Librebucket logo" />
       </div>
+      <button class="theme-toggle" on:click={toggleTheme}>
+        {isDarkMode ? '☀️' : '🌙'}
+      </button>
     </div>
   </header>
 
-  <main class="div">
-    <div class="main-content-wrapper">
-      <section class="top-section">
-        <div class="text-wrapper-5">Librebucket</div>
-        <p class="text-wrapper-9-1">
-          Create the future, <a href="#" class="text-wrapper-9-1-2">
-            commit after commit</a
-          >
-        </p>
-        <p class="text-wrapper-9">
-          Librebucket is a self-hosted lightweight software forge.
-        </p>
-        <p class="text-wrapper-10">
-          Easy to install and low maintenance, it just does the job.
-        </p>
-        <p class="you-are-currently">
-          You are currently visiting an instance, means that we do not owned it
-          and, we are not <br />responsible for any things which on this forge.
-        </p>
-        <div class="button-group">
-          <div class="group-2">
-            <div class="div-wrapper register-button">
-              <div class="join-register">Join &amp; register</div>
-            </div>
-          </div>
-          <div class="group-3">
-            <div class="div-wrapper login-button">
-              <div class="text-wrapper-11">Log In</div>
-            </div>
+  <main class="main">
+    <div class="main-content">
+      <section class="hero-section">
+        <div class="hero-content">
+          <h1 class="main-title">Librebucket</h1>
+          <p class="hero-subtitle">
+            Create the future, <a href="#" class="hero-link">commit after commit</a>
+          </p>
+          <p class="hero-description">
+            Librebucket is a self-hosted lightweight software forge.
+          </p>
+          <p class="hero-description">
+            Easy to install and low maintenance, it just does the job.
+          </p>
+          <p class="instance-notice">
+            You are currently visiting an instance, means that we do not owned it
+            and, we are not <br />responsible for any things which on this forge.
+          </p>
+          <div class="button-group">
+            <button class="btn btn-primary">Join &amp; register</button>
+            <button class="btn btn-secondary">Log In</button>
           </div>
         </div>
-        <div class="overlap-8">
+        <div class="hero-image">
           <img class="group-4" src="img/group-10-1.svg" alt="Group image" />
           <img class="group-5" src="img/group-17-1.svg" alt="Group image" />
         </div>
       </section>
 
-      <section class="overlap">
-        <div class="text-wrapper">Why Librebucket?</div>
-
+      <section class="features-section">
+        <h2 class="section-title">Why Librebucket?</h2>
         <div class="feature-grid">
           <div class="feature-item">
-            <img class="feather" src="img/feather.svg" alt="Feather icon" />
+            <img src="img/feather.svg" alt="Feather icon" />
             <div>
-              <div class="lightweight-fast">Lightweight &amp; fast</div>
-              <p class="p">
+              <h3>Lightweight &amp; fast</h3>
+              <p>
                 Librebucket is less than 500MB and lightning fast, even
                 Raspberry Pi can run it!
               </p>
             </div>
           </div>
           <div class="feature-item">
-            <img
-              class="coffee-to-go"
-              src="img/coffee-to-go.svg"
-              alt="Coffee To Go icon"
-            />
+            <img src="img/coffee-to-go.svg" alt="Coffee To Go icon" />
             <div>
-              <div class="text-wrapper-2">
-                Coffee To Go, easy install &amp; maintain
-              </div>
-              <p class="text-wrapper-3">
+              <h3>Coffee To Go, easy install &amp; maintain</h3>
+              <p>
                 Our "bucket" is packed with tools and stuff already, for
                 developers, by developers.
               </p>
             </div>
           </div>
           <div class="feature-item">
-            <img class="git" src="img/git.svg" alt="Git icon" />
+            <img src="img/git.svg" alt="Git icon" />
             <div>
-              <div class="text-wrapper-2">
-                Self-hosted alternative to GitHub and GitLab
-              </div>
-              <p class="text-wrapper-3">
+              <h3>Self-hosted alternative to GitHub and GitLab</h3>
+              <p>
                 GitHub and GitLab are full of telemetry. Librebucket is an
                 awesome alternative!
               </p>
             </div>
           </div>
           <div class="feature-item">
-            <img
-              class="heart-cog"
-              src="img/heart-cog.svg"
-              alt="Heart Cog icon"
-            />
+            <img src="img/heart-cog.svg" alt="Heart Cog icon" />
             <div>
-              <div class="text-wrapper-2">100% Free and OSS</div>
-              <p class="text-wrapper-3">
+              <h3>100% Free and OSS</h3>
+              <p>
                 Standard Group loves open-source. Librebucket will be forever
                 free and open-source!
               </p>
@@ -111,53 +103,40 @@
         </div>
       </section>
 
-      <section class="overlap-6">
-        <div class="text-wrapper-6">Get Involved</div>
-        <p class="librebucket-is-made">
+      <section class="contribute-section">
+        <h2 class="section-title">Get Involved</h2>
+        <p class="contribute-description">
           Librebucket is made by many motivated people, and we are looking
           forward to your contribution. Small or big contributions, you are
           still making big steps for Librebucket.
         </p>
-        <div class="contribution-buttons">
-          <div class="overlap-wrapper">
-            <div class="overlap-7 contribute-button">
-              <img class="github" src="img/github.svg" alt="GitHub icon" />
-              <div class="text-wrapper-7">Contribute on Github</div>
-            </div>
-          </div>
-          <div class="overlap-group-wrapper">
-            <div class="overlap-7 donate-button">
-              <img
-                class="heart-cog-2"
-                src="img/heart-cog.svg"
-                alt="Heart Cog icon"
-              />
-              <div class="text-wrapper-8">Donate</div>
-            </div>
-          </div>
+        <div class="contribute-buttons">
+          <button class="btn btn-contribute">
+            <img src="img/github.svg" alt="GitHub icon" />
+            Contribute on Github
+          </button>
+          <button class="btn btn-donate">
+            <img src="img/heart-cog.svg" alt="Heart Cog icon" />
+            Donate
+          </button>
         </div>
       </section>
     </div>
   </main>
 
-  <footer class="overlap-9">
-    <div class="footer-left">
-      <p class="text-wrapper-14">Version: 0.0.0-debug</p>
-      <p class="text-wrapper-16">This home page is running on Librebucket</p>
-      <p class="text-wrapper-12">
-        Copyright © 2025 Librebucket authors. Content available under CC BY-SA
-        4.0.
-      </p>
-      <p class="text-wrapper-13">
-        Credit to the Forgejo's contributors for design inspiration.
-      </p>
-    </div>
-    <div class="footer-right">
-      <a href="#" class="text-wrapper-15">Licenses</a>
-      <a href="#"><img class="api" src="img/api.svg" alt="API icon" /></a>
-      <a href="#"
-        ><img class="github-2" src="img/github.svg" alt="GitHub icon" /></a
-      >
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <p>Version: 0.0.0-debug</p>
+        <p>This home page is running on Librebucket</p>
+        <p>Copyright © 2025 Librebucket authors. Content available under CC BY-SA 4.0.</p>
+        <p>Credit to the Forgejo's contributors for design inspiration.</p>
+      </div>
+      <div class="footer-right">
+        <a href="#">Licenses</a>
+        <a href="#"><img src="img/api.svg" alt="API icon" /></a>
+        <a href="#"><img src="img/github.svg" alt="GitHub icon" /></a>
+      </div>
     </div>
   </footer>
 </div>
@@ -165,37 +144,122 @@
 <style>
   :root {
     --primary-blue: #3487e7;
+    --primary-blue-hover: #2976d6;
+    --secondary-orange: #e77634;
+    --secondary-orange-hover: #d66623;
+    --danger-red: #e73434;
+    --danger-red-hover: #d62323;
+    
+    /* Dark theme */
     --dark-bg: #171e26;
     --dark-secondary-bg: #10161d;
     --dark-card-bg: #242e38;
-    --text-primary: #ffffff;
-    --text-secondary: #ffffff66;
+    --dark-text-primary: #ffffff;
+    --dark-text-secondary: #ffffff66;
+    --dark-border: #ffffff33;
+    
+    /* Light theme */
+    --light-bg: #ffffff;
+    --light-secondary-bg: #f8f9fa;
+    --light-card-bg: #ffffff;
+    --light-text-primary: #1a1a1a;
+    --light-text-secondary: #666666;
+    --light-border: #e0e0e0;
+    
     --gradient-blue: linear-gradient(90deg, #3487e7 0%, #205fa8 100%);
     --gradient-orange: linear-gradient(90deg, #e77634 0%, #cdb623 100%);
     --gradient-red: linear-gradient(90deg, #e73434 0%, #811d1d 100%);
   }
 
-  .TV {
-    background-color: var(--dark-bg);
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    position: relative;
-    font-family: "Noto Sans", Helvetica, sans-serif;
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
 
-  .overlap-5 {
+  .app {
+    min-height: 100vh;
+    font-family: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+  }
+
+  /* Dark theme styles */
+  .app.dark {
+    background-color: var(--dark-bg);
+    color: var(--dark-text-primary);
+  }
+
+  .app.dark .header {
+    background-color: var(--dark-secondary-bg);
+    border-bottom: 1px solid var(--dark-border);
+  }
+
+  .app.dark .features-section {
+    background-color: var(--dark-card-bg);
+    border: 1px solid var(--dark-border);
+  }
+
+  .app.dark .footer {
+    background-color: var(--dark-secondary-bg);
+    border-top: 1px solid var(--dark-border);
+  }
+
+  /* Light theme styles */
+  .app.light {
+    background-color: var(--light-bg);
+    color: var(--light-text-primary);
+  }
+
+  .app.light .header {
+    background-color: var(--light-secondary-bg);
+    border-bottom: 1px solid var(--light-border);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .app.light .features-section {
+    background-color: var(--light-card-bg);
+    border: 1px solid var(--light-border);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .app.light .footer {
+    background-color: var(--light-secondary-bg);
+    border-top: 1px solid var(--light-border);
+  }
+
+  .app.light .hero-description,
+  .app.light .instance-notice,
+  .app.light .contribute-description,
+  .app.light .feature-item p,
+  .app.light .footer p,
+  .app.light .footer a {
+    color: var(--light-text-secondary);
+  }
+
+  .app.light .feature-item img {
+    filter: invert(20%) sepia(92%) saturate(879%) hue-rotate(187deg) brightness(97%) contrast(87%);
+  }
+
+  .app.light .footer img {
+    filter: invert(40%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(60%) contrast(100%);
+  }
+
+  .app.light .btn img {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+  }
+
+  .header {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    right: 0;
     height: 80px;
-    background-color: var(--dark-secondary-bg);
     z-index: 100;
     display: flex;
     justify-content: center;
-    border-bottom: 1px solid #ffffff1a;
+    align-items: center;
   }
 
   .header-content {
@@ -203,258 +267,99 @@
     max-width: 1280px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 0 2rem;
   }
 
-  .new-librebucket-logo {
+  .logo {
     display: flex;
     align-items: center;
     height: 60px;
-    margin-top: 10px;
   }
 
-  .div {
-    width: 100%;
-    max-width: 1280px;
-    height: 100vh;
-    position: relative;
-    box-sizing: border-box;
+  .logo img {
+    height: 40px;
+    transition: opacity 0.3s ease;
+  }
+
+  .theme-toggle {
+    background: none;
+    border: 2px solid var(--primary-blue);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .theme-toggle:hover {
+    background-color: var(--primary-blue);
+    transform: scale(1.05);
+  }
+
+  .main {
+    flex: 1;
     padding-top: 80px;
-    padding-bottom: 165px;
+    padding-bottom: 200px;
+    display: flex;
+    justify-content: center;
     overflow-y: auto;
   }
 
-  .main-content-wrapper {
+  .main-content {
+    width: 100%;
+    max-width: 1280px;
     padding: 2rem;
   }
 
-  main::-webkit-scrollbar {
-    display: none;
-  }
-
-  .overlap-9 {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 165px;
-    background-color: var(--dark-secondary-bg);
-    border-top: 1px solid #ffffff33;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
+  .hero-section {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4rem;
     align-items: center;
-    padding: 0 2rem;
-    box-sizing: border-box;
+    padding: 4rem 0;
+    min-height: 600px;
   }
 
-  .footer-left {
+  .hero-content {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 1rem;
   }
 
-  .footer-right {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  .footer-right a,
-  .footer-right img {
-    position: static;
-    filter: invert(90%) sepia(0%) saturate(7457%) hue-rotate(109deg)
-      brightness(122%) contrast(103%);
-  }
-
-  .footer-right .api,
-  .footer-right .github-2 {
-    width: 36px;
-    height: 36px;
-  }
-
-  .text-wrapper-15 {
-    color: var(--text-secondary);
-    font-size: 16px;
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .text-wrapper-15:hover {
-    color: var(--text-primary);
-  }
-
-  .top-section {
-    position: relative;
-    padding-top: 4rem;
-    padding-bottom: 5rem;
-  }
-
-  .overlap {
-    background-color: var(--dark-card-bg);
-    border: 1px solid #ffffff33;
-    padding: 4rem 2rem;
-    border-radius: 1rem;
-    margin-top: 2rem;
-    position: relative;
-  }
-
-  .text-wrapper {
-    text-align: center;
-    background: var(--gradient-blue);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
+  .main-title {
     font-weight: 700;
-    font-size: 64px;
-    letter-spacing: -3.2px;
-    margin-bottom: 3rem;
-  }
-
-  .feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 2.5rem;
-    align-items: start;
-  }
-
-  .feature-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.5rem;
-  }
-
-  .feature-item img {
-    width: 63px;
-    height: 63px;
-    filter: invert(40%) sepia(92%) saturate(879%) hue-rotate(187deg)
-      brightness(97%) contrast(87%);
-    flex-shrink: 0;
-  }
-
-  .lightweight-fast,
-  .text-wrapper-2 {
-    font-weight: 700;
-    color: var(--text-primary);
-    font-size: 24px;
-    letter-spacing: -1.2px;
-    margin-bottom: 0.5rem;
-  }
-
-  .p,
-  .text-wrapper-3 {
-    font-weight: 400;
-    color: var(--text-secondary);
-    font-size: 16px;
-    letter-spacing: -0.8px;
-    line-height: 1.5;
-  }
-
-  .text-wrapper-5 {
-    font-weight: 700;
-    color: var(--text-primary);
-    font-size: 64px;
-    letter-spacing: -3.2px;
-  }
-
-  .overlap-6 {
-    padding: 4rem 0;
-  }
-
-  .text-wrapper-6 {
-    font-weight: 700;
-    color: var(--text-primary);
     font-size: 64px;
     letter-spacing: -3.2px;
     margin-bottom: 1rem;
   }
 
-  .librebucket-is-made {
-    width: 100%;
-    max-width: 984px;
-    font-size: 24px;
-    letter-spacing: -1.2px;
+  .hero-subtitle {
     font-weight: 400;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 2rem;
-  }
-
-  .contribution-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .overlap-7 {
-    width: 296px;
-    height: 66px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-
-  .overlap-7:hover {
-    transform: scale(1.03);
-  }
-
-  .overlap-7.contribute-button {
-    background: var(--gradient-blue);
-  }
-
-  .overlap-7.donate-button {
-    background: var(--gradient-red);
-  }
-
-  .github,
-  .heart-cog-2 {
-    filter: invert(90%) sepia(0%) saturate(7457%) hue-rotate(109deg)
-      brightness(122%) contrast(103%);
-    width: 40px;
-    height: 40px;
-  }
-
-  .text-wrapper-7,
-  .text-wrapper-8 {
-    font-weight: 500;
-    color: var(--text-primary);
-    font-size: 24px;
-    letter-spacing: -1.2px;
-  }
-
-  .text-wrapper-9,
-  .text-wrapper-10,
-  .you-are-currently {
-    font-weight: 400;
-    color: var(--text-secondary);
-    font-size: 24px;
-    letter-spacing: -1.2px;
-    margin-top: 1rem;
-  }
-
-  .text-wrapper-9-1 {
-    font-weight: 400;
-    color: var(--text-primary);
     font-size: 32px;
     letter-spacing: -1.6px;
   }
 
-  .text-wrapper-9-1-2 {
+  .hero-link {
     background: var(--gradient-blue);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    color: transparent;
     text-decoration: none;
+    font-weight: 500;
   }
 
-  .you-are-currently {
+  .hero-description {
+    font-weight: 400;
+    font-size: 24px;
+    letter-spacing: -1.2px;
+    margin-top: 0.5rem;
+  }
+
+  .instance-notice {
     font-size: 16px;
     letter-spacing: -0.8px;
+    margin-top: 1rem;
   }
 
   .button-group {
@@ -464,56 +369,53 @@
     margin-top: 2rem;
   }
 
-  .div-wrapper {
-    width: 211px;
-    height: 66px;
+  .btn {
+    padding: 18px 32px;
+    border: none;
     border-radius: 10px;
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: -1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 0.2s;
+    gap: 0.5rem;
+    color: white;
+    text-decoration: none;
   }
 
-  .div-wrapper:hover {
+  .btn:hover {
     transform: scale(1.03);
   }
 
-  .div-wrapper.register-button {
+  .btn-primary {
     background: var(--gradient-blue);
   }
 
-  .join-register {
-    font-weight: 500;
-    color: var(--text-primary);
-    font-size: 24px;
-    letter-spacing: -1.2px;
-  }
-
-  .div-wrapper.login-button {
+  .btn-secondary {
     background: var(--gradient-orange);
   }
 
-  .text-wrapper-11 {
-    font-weight: 500;
-    color: var(--text-primary);
-    font-size: 24px;
-    letter-spacing: -1.2px;
+  .btn-contribute {
+    background: var(--gradient-blue);
   }
 
-  .overlap-8 {
-    position: absolute;
+  .btn-donate {
+    background: var(--gradient-red);
+  }
+
+  .btn img {
+    width: 24px;
+    height: 24px;
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+  }
+
+  .hero-image {
+    position: relative;
     width: 225px;
     height: 303px;
-    top: 5rem;
-    right: 5rem;
-    display: none;
-  }
-
-  @media (min-width: 1024px) {
-    .overlap-8 {
-      display: block;
-    }
+    flex-shrink: 0;
   }
 
   .group-4,
@@ -536,65 +438,307 @@
     left: 0;
   }
 
-  .text-wrapper-12,
-  .text-wrapper-13,
-  .text-wrapper-14,
-  .text-wrapper-16 {
+  .features-section {
+    padding: 4rem 2rem;
+    border-radius: 1rem;
+    margin: 2rem 0;
+  }
+
+  .section-title {
+    text-align: center;
+    background: var(--gradient-blue);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    font-size: 64px;
+    letter-spacing: -3.2px;
+    margin-bottom: 3rem;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .feature-item img {
+    width: 63px;
+    height: 63px;
+    filter: invert(40%) sepia(92%) saturate(879%) hue-rotate(187deg) brightness(97%) contrast(87%);
+    flex-shrink: 0;
+  }
+
+  .feature-item h3 {
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: -1.2px;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-item p {
     font-weight: 400;
-    color: var(--text-secondary);
-    font-size: 15px;
-    letter-spacing: -0.75px;
+    font-size: 16px;
+    letter-spacing: -0.8px;
+    line-height: 1.5;
+  }
+
+  .contribute-section {
+    padding: 4rem 0;
+    text-align: center;
+  }
+
+  .contribute-description {
+    max-width: 984px;
+    margin: 0 auto 2rem;
+    font-size: 24px;
+    letter-spacing: -1.2px;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  .contribute-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .footer-content {
+    width: 100%;
+    max-width: 1280px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2rem;
+  }
+
+  .footer-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .footer-left p {
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: -0.5px;
+    line-height: 1.4;
+  }
+
+  .footer-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .footer-right a {
+    color: inherit;
+    text-decoration: none;
+    font-size: 16px;
+    transition: opacity 0.2s;
+  }
+
+  .footer-right a:hover {
+    opacity: 0.8;
+  }
+
+  .footer-right img {
+    width: 36px;
+    height: 36px;
+    filter: invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%) contrast(100%);
+  }
+
+  @media (max-width: 1024px) {
+    .hero-section {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    
+    .hero-image {
+      display: none;
+    }
   }
 
   @media (max-width: 900px) {
-    .main-content-wrapper {
-      padding: 1rem !important;
+    .main-content {
+      padding: 1rem;
     }
-    .text-wrapper, .text-wrapper-5, .text-wrapper-6 {
-      font-size: 2rem !important;
-      letter-spacing: -1px !important;
+    
+    .main-title,
+    .section-title {
+      font-size: 2.5rem;
+      letter-spacing: -1px;
     }
+    
+    .hero-section {
+      padding: 2rem 0;
+      min-height: auto;
+    }
+    
+    .hero-description,
+    .contribute-description {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.4rem;
+      line-height: 1.4;
+    }
+    
+    .instance-notice {
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    
+    .button-group {
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    
+    .btn {
+      width: 100%;
+      justify-content: center;
+      padding: 20px 24px;
+      font-size: 18px;
+    }
+    
     .feature-grid {
-      grid-template-columns: 1fr !important;
-      gap: 1rem !important;
+      grid-template-columns: 1fr;
+      gap: 2rem;
     }
-    .footer-left, .footer-right {
-      flex-direction: column !important;
-      align-items: flex-start !important;
-      gap: 0.5rem !important;
+    
+    .features-section {
+      padding: 3rem 1.5rem;
+      margin: 2rem 0;
     }
-    .overlap-5, .overlap-9 {
-      height: auto !important;
-      padding: 0.5rem 1rem !important;
+    
+    .contribute-section {
+      padding: 3rem 0;
     }
-    .div-wrapper, .overlap-7 {
-      width: 100% !important;
-      min-width: 0 !important;
-      max-width: 100% !important;
+    
+    .contribute-buttons {
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 400px;
+      margin: 0 auto;
     }
-    .top-section {
-      padding-top: 2rem !important;
-      padding-bottom: 2rem !important;
+    
+    .footer {
+      height: auto;
+      min-height: 200px;
+      position: fixed;
+      padding: 0;
     }
-    .librebucket-is-made {
-      font-size: 1rem !important;
+    
+    .footer-content {
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 2rem 1rem;
+      align-items: center;
+      text-align: center;
+      justify-content: center;
+      height: 100%;
     }
-    .text-wrapper-9, .text-wrapper-10, .you-are-currently {
-      font-size: 1rem !important;
+    
+    .footer-left {
+      order: 2;
+      align-items: center;
+      gap: 0.4rem;
     }
-    .text-wrapper-9-1 {
-      font-size: 1.2rem !important;
+    
+    .footer-left p {
+      font-size: 13px;
+      line-height: 1.4;
     }
-    .footer-right .api, .footer-right .github-2 {
-      width: 28px !important;
-      height: 28px !important;
+    
+    .footer-right {
+      order: 1;
+      gap: 2rem;
+      margin-bottom: 0.5rem;
     }
-    .github, .heart-cog-2 {
-      width: 28px !important;
-      height: 28px !important;
+    
+    .footer-right img {
+      width: 32px;
+      height: 32px;
     }
-    .overlap-8 {
-      display: none !important;
+    
+    .main {
+      padding-bottom: 220px;
+    }
+    
+    .header-content {
+      padding: 0 1rem;
+    }
+    
+    .theme-toggle {
+      padding: 6px 10px;
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .main-content {
+      padding: 0.5rem;
+    }
+    
+    .main-title,
+    .section-title {
+      font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+    }
+    
+    .hero-description,
+    .contribute-description {
+      font-size: 1rem;
+    }
+    
+    .btn {
+      padding: 18px 20px;
+      font-size: 16px;
+    }
+    
+    .features-section,
+    .contribute-section {
+      padding: 2rem 1rem;
+    }
+    
+    .footer-content {
+      padding: 1.5rem 0.5rem;
+    }
+    
+    .footer-left p {
+      font-size: 12px;
+    }
+    
+    .main {
+      padding-bottom: 200px;
     }
   }
 </style>

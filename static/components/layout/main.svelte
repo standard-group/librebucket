@@ -1,7 +1,3 @@
-<script>
-  // Add any necessary JavaScript here
-</script>
-
 <!-- Header -->
 <header class="header">
   <div class="container">

@@ -42,6 +42,34 @@ func UserRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// UserLogInHandler handles POST /api/v1/users/login
+func UserLogInHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeJSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	var req struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil || req.Username == "" || req.Password == "" {
+		writeJSONError(w, http.StatusBadRequest, "Invalid JSON or missing fields")
+		return
+	}
+	user, err := db.AuthenticateUser(req.Username, req.Password)
+	if err != nil {
+		writeJSONError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusAccepted)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"status": "success",
+		"token":  user.Token,
+	})
+}
+
 // UserAPIKeyHandler handles POST /api/v1/users/{username}/apikeys
 func UserAPIKeyHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {

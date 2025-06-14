@@ -34,6 +34,7 @@ func StartServer() {
 
 	// API endpoints
 	r.Post("/api/v1/users/register", api.UserRegisterHandler)
+	r.Post("/api/v1/users/login", api.UserLogInHandler)
 	r.Post("/api/v1/users/{username}/apikeys", api.UserAPIKeyHandler)
 	r.Post("/api/v1/git/create", api.APICreateRepoHandler)
 
@@ -44,8 +45,8 @@ func StartServer() {
 	r.Handle("/img/*", http.StripPrefix("/img/", http.FileServer(http.Dir("static/components/img"))))
 
 	// Generic handler for root, repo pages, and Git HTTP services
-	r.Get("/", sveltigo.Page("components/page/home"))       // Assuming static/index.html becomes components/page/home.svelte
-	r.Get("/login", sveltigo.Page("components/page/login")) // Assuming static/login.html becomes components/page/login.svelte
+	r.Get("/", sveltigo.Page("components/page/home"))
+	r.Get("/login", sveltigo.Page("components/page/login"))
 
 	// Git HTTP services
 	r.Get("/{username}/{repoName}.git/info/refs", handleGitInfoRefs)
