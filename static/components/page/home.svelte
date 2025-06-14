@@ -1,4 +1,4 @@
-<script>More actions
+<script>
   // No script logic needed for this static page layout.
   // This is a Svelte component file (.svelte).
 </script>
