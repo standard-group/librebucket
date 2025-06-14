@@ -1,4 +1,4 @@
-<script>
+<script>More actions
   // No script logic needed for this static page layout.
   // This is a Svelte component file (.svelte).
 </script>
@@ -595,31 +595,6 @@
     }
     .overlap-8 {
       display: none !important;
-    }
-  }
-
-  @media (max-width: 600px) {
-    .text-wrapper, .text-wrapper-5, .text-wrapper-6 {
-      font-size: 1.2rem !important;
-      letter-spacing: -0.5px !important;
-    }
-    .feature-item .lightweight-fast, .feature-item .text-wrapper-2 {
-      font-size: 1rem !important;
-    }
-    .librebucket-is-made {
-      font-size: 0.9rem !important;
-    }
-    .text-wrapper-9, .text-wrapper-10, .you-are-currently {
-      font-size: 0.9rem !important;
-    }
-    .text-wrapper-9-1 {
-      font-size: 1rem !important;
-    }
-    .text-wrapper-7, .text-wrapper-8, .join-register, .text-wrapper-11 {
-      font-size: 1rem !important;
-    }
-    .footer-left .text-wrapper-12, .footer-left .text-wrapper-13, .footer-left .text-wrapper-14, .footer-left .text-wrapper-16 {
-      font-size: 0.8rem !important;
     }
   }
 </style>
