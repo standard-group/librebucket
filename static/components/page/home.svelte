@@ -545,4 +545,56 @@
     font-size: 15px;
     letter-spacing: -0.75px;
   }
+
+  @media (max-width: 900px) {
+    .main-content-wrapper {
+      padding: 1rem !important;
+    }
+    .text-wrapper, .text-wrapper-5, .text-wrapper-6 {
+      font-size: 2rem !important;
+      letter-spacing: -1px !important;
+    }
+    .feature-grid {
+      grid-template-columns: 1fr !important;
+      gap: 1rem !important;
+    }
+    .footer-left, .footer-right {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 0.5rem !important;
+    }
+    .overlap-5, .overlap-9 {
+      height: auto !important;
+      padding: 0.5rem 1rem !important;
+    }
+    .div-wrapper, .overlap-7 {
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+    }
+    .top-section {
+      padding-top: 2rem !important;
+      padding-bottom: 2rem !important;
+    }
+    .librebucket-is-made {
+      font-size: 1rem !important;
+    }
+    .text-wrapper-9, .text-wrapper-10, .you-are-currently {
+      font-size: 1rem !important;
+    }
+    .text-wrapper-9-1 {
+      font-size: 1.2rem !important;
+    }
+    .footer-right .api, .footer-right .github-2 {
+      width: 28px !important;
+      height: 28px !important;
+    }
+    .github, .heart-cog-2 {
+      width: 28px !important;
+      height: 28px !important;
+    }
+    .overlap-8 {
+      display: none !important;
+    }
+  }
 </style>
