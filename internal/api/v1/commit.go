@@ -23,7 +23,7 @@ func CommitHandler(mux *http.ServeMux) {
 	mux.HandleFunc("GET /api/v1/repos/{username}/{reponame}/commits/{hash}/changes", getCommitChanges)
 
 	// Get file content at a specific commit
-	mux.HandleFunc("GET /api/v1/repos/{username}/{reponame}/blob/{hash}/{*filepath}", getFileAtCommit)
+	mux.HandleFunc("GET /api/v1/repos/{username}/{reponame}/blob/{hash}/{filepath...}", getFileAtCommit) // fix for the getFileAtCommit
 }
 
 func getCommitHistory(w http.ResponseWriter, r *http.Request) {

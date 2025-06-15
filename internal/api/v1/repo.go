@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"path/filepath"
+	"strings"
 
 	"librebucket/internal/db"
 	"librebucket/internal/git"
@@ -27,20 +28,26 @@ func APICreateRepoHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Authenticate the user trying to create the repo
-	authUsername, authPassword, authOK := getBasicAuth(r) // Correctly get password from Basic Auth
-	if !authOK {
+	// Authenticate the user trying to create the repo (get user by the token)
+	token := r.Header.Get("Authorization")
+	if token == "" {
+		token = r.Header.Get("X-Auth-Token")
+	}
+	if token == "" {
+		token = r.URL.Query().Get("token")
+	}
+
+	var user db.User
+	var err error
+	if strings.HasPrefix(token, "Bearer ") {
+		user, err = db.GetUserByBearerToken(token)
+	} else {
+		user, err = db.GetUserByToken(token)
+	}
+	if err != nil {
 		writeJSONError(w, http.StatusUnauthorized, "Authentication required to create repository")
 		return
 	}
-
-	// Use the password extracted from the Basic Auth header
-	user, err := db.AuthenticateUser(authUsername, authPassword)
-	if err != nil || user.Username != authUsername { // Double-check username if basic auth didn't match
-		writeJSONError(w, http.StatusUnauthorized, "Invalid authentication for repo creation")
-		return
-	}
-	// User must be the owner of the repo being created
 	if user.Username != req.Username {
 		writeJSONError(w, http.StatusForbidden, "Cannot create repository for another user")
 		return

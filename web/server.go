@@ -1,6 +1,8 @@
 package web
 
 import (
+	"bytes"
+	"compress/gzip"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
@@ -13,7 +15,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"sync"
 
 	"github.com/HazelnutParadise/sveltigo"
 	"github.com/go-chi/chi/v5"
@@ -41,6 +42,11 @@ func StartServer() {
 	r.Post("/api/v1/users/login", api.UserLogInHandler)
 	r.Post("/api/v1/users/{username}/apikeys", api.UserAPIKeyHandler)
 	r.Post("/api/v1/git/create", api.APICreateRepoHandler)
+
+	// Commits API endpoints (mount ServeMux from api.CommitHandler)
+	commitMux := http.NewServeMux()
+	api.CommitHandler(commitMux)
+	r.Mount("/api/v1/repos", commitMux)
 
 	// Serve static files
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
@@ -201,7 +207,6 @@ func handleGitInfoRefs(w http.ResponseWriter, r *http.Request) {
 func handleGitService(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
 	repoName := chi.URLParam(r, "repoName")
-	service := chi.URLParam(r, "*") // Capture the rest of the path after repoName
 
 	// Ensure repoName does not have .git suffix for consistency
 	if strings.HasSuffix(repoName, ".git") {
@@ -216,32 +221,32 @@ func handleGitService(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var gitServiceCmd string // Actual git command, e.g., "upload-pack" or "receive-pack"
-	var action string        // "pull" or "push" for auth purposes
-	switch service {
-	case "git-upload-pack":
+	var gitServiceCmd string
+	var action string
+	var serviceName string // This will be "git-upload-pack" or "git-receive-pack"
+
+	// correctly determine the service from the request URL path
+	if strings.HasSuffix(r.URL.Path, "/git-upload-pack") {
+		serviceName = "git-upload-pack"
 		gitServiceCmd = "upload-pack"
 		action = "pull"
-	case "git-receive-pack":
+	} else if strings.HasSuffix(r.URL.Path, "/git-receive-pack") {
+		serviceName = "git-receive-pack"
 		gitServiceCmd = "receive-pack"
 		action = "push"
-	default:
+	} else {
 		http.Error(w, "Invalid Git service requested.", http.StatusBadRequest)
 		return
 	}
 
-	// Check authorization
+	// check authorizationo
 	if !checkRepoAuth(r, repoPath, action, username) {
 		w.Header().Set("WWW-Authenticate", `Basic realm="LibreBucket"`)
-		// Send 401 Unauthorized without a body for git service requests
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
-	// Execute git command
-	// Pass the repository path relative to the working directory
 	cmd := exec.Command("git", gitServiceCmd, "--stateless-rpc", filepath.Base(repoPath))
-	// Change working directory to the parent of the repository path
 	cmd.Dir = filepath.Dir(repoPath)
 
 	stdin, err := cmd.StdinPipe()
@@ -254,52 +259,49 @@ func handleGitService(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal server error: failed to create stdout pipe.", http.StatusInternalServerError)
 		return
 	}
-	stderr, err := cmd.StderrPipe()
-	if err != nil {
-		http.Error(w, "Internal server error: failed to create stderr pipe.", http.StatusInternalServerError)
-		return
-	}
+	// capture stderr for logging
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
 
 	if err := cmd.Start(); err != nil {
 		http.Error(w, "Internal server error: failed to start git process.", http.StatusInternalServerError)
 		return
 	}
 
-	// Set correct headers for Git service response
-	w.Header().Set("Content-Type", fmt.Sprintf("application/x-%s-result", service))
-	w.WriteHeader(http.StatusOK)
-
-	var wg sync.WaitGroup
-	wg.Add(2) // Wait for both stdin and stdout/stderr pipes to finish
-
-	// Goroutine to copy request body (client's data) to git's stdin
+	// handle gzip compressed request body from the git client*
 	go func() {
-		defer wg.Done()
-		defer stdin.Close() // Important: close stdin pipe when done copying
-		if _, err := io.Copy(stdin, r.Body); err != nil {
+		defer stdin.Close()
+		var reader io.Reader = r.Body
+		if r.Header.Get("Content-Encoding") == "gzip" {
+			gz, err := gzip.NewReader(r.Body)
+			if err != nil {
+				log.Printf("Error creating gzip reader for git request: %v", err)
+				return
+			}
+			reader = gz
+			defer gz.Close()
+		}
+
+		if _, err := io.Copy(stdin, reader); err != nil {
 			log.Printf("Error copying request body to git stdin: %v", err)
 		}
 	}()
 
-	// Goroutine to copy git's stdout and stderr to the HTTP response
-	go func() {
-		defer wg.Done()
-		// Git protocol requires streaming stdout and stderr to the client.
-		// Prioritize stdout, then ensure stderr is also sent.
-		if _, err := io.Copy(w, stdout); err != nil {
-			log.Printf("Error copying git stdout to response: %v", err)
-		}
-		if _, err := io.Copy(w, stderr); err != nil {
-			log.Printf("Error copying git stderr to response: %v", err)
-		}
-	}()
+	w.Header().Set("Content-Type", fmt.Sprintf("application/x-%s-result", serviceName))
+	w.Header().Set("Cache-Control", "no-cache")
+	w.WriteHeader(http.StatusOK)
 
-	wg.Wait() // Wait for both goroutines to complete I/O
+	// copy git's stdout to the HTTP response
+	if _, err := io.Copy(w, stdout); err != nil {
+		log.Printf("Error copying git stdout to response: %v", err)
+	}
 
-	// Wait for the git command to finish.
-	// If it exits with an error, the client will see it through the streamed stderr.
 	if err := cmd.Wait(); err != nil {
 		log.Printf("Git command (%s) exited with error: %v", gitServiceCmd, err)
+		// log any stderr
+		if stderr.Len() > 0 {
+			log.Printf("Git stderr: %s", stderr.String())
+		}
 	}
 }
 
