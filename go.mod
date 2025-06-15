@@ -5,7 +5,7 @@ go 1.24.3
 require (
 	github.com/HazelnutParadise/sveltigo v0.0.3
 	github.com/go-chi/chi/v5 v5.2.1
-	github.com/go-git/go-git/v5 v5.16.0
+	github.com/go-git/go-git/v5 v5.16.2
 	github.com/mattn/go-sqlite3 v1.14.28
 	golang.org/x/crypto v0.39.0
 )
