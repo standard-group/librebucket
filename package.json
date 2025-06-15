@@ -23,6 +23,6 @@
   "homepage": "https://github.com/standard-group/librebucket#readme",
   "dependencies": {
     "golte": "^0.1.2",
-    "svelte": "^4.2.7"
+    "svelte": "^5.0.0"
   }
 }
