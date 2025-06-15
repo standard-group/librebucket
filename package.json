@@ -1,7 +1,8 @@
 {
   "name": "librebucket",
+  "type": "module",
   "version": "1.0.0",
-  "description": "<div style=\"background: #f0f0f0; padding: 20px; display: inline-block;\">\r    <img src=\"./docs/images/librebucket-logo.svg\">\r </div>",
+  "description": "This Standard Group's NPM package for Husky, Svelte with Golte and Commitlint.",
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",

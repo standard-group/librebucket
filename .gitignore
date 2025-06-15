@@ -58,7 +58,8 @@ Thumbs.db
 # Build output directories
 /build/
 /bin/
-/dist/
+/dist/client
+/dist/server
 
 # Environment files
 .env
