@@ -1,4 +1,4 @@
-# .github/ranger.yaml
+# .github/standard.yaml
 default:
   close:
     # Default time to wait before closing the label. Can either be a number in milliseconds
