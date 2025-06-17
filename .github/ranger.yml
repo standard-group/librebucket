@@ -44,6 +44,14 @@ labels:
     action: comment
     delay: 1d
     message: "You asked me to remind you about this $DELAY ago."
+  enhancement:
+    action: comment
+    delay: 5s
+    message: "Thank you for making an issue! If you have more something to say/add, please comment down below."
+  documentation:
+    action: comment
+    delay: 5s
+    message: "Thank you for contributing to the documentation! If you have more something to say/add, please comment down below."
 
 merges:
   # Delete branch after merging the PR
