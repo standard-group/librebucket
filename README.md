@@ -85,6 +85,10 @@ This project follows the [Google Go Style Guide](https://google.github.io/styleg
 
 Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) before submitting pull requests.
 
+## Repo Activity
+
+![Alt](https://repobeats.axiom.co/api/embed/8fb7eb654c3100485ab3adef9d5bd7e543568d94.svg "Repobeats analytics image")
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
