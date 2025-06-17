@@ -1,4 +1,4 @@
-# .github/standard.yaml
+# .github/standard.yaml test
 default:
   close:
     # Default time to wait before closing the label. Can either be a number in milliseconds
