@@ -32,6 +32,7 @@ labels:
     comment: 'Issue was labeled as `wontfix`, since contributors/main'
   approved: 
     action: merge
+    delay: 0s
   'new contributor':
     action: comment
     delay: 5s
