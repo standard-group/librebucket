@@ -1,6 +1,6 @@
 name: "❓ Question"
 description: Ask a question about the project
-labels: ["triage: question"]
+labels: ["question"]
 body:
   - type: markdown
     attributes:
