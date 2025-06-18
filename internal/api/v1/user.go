@@ -8,8 +8,6 @@ import (
 	"strings"
 
 	"librebucket/internal/db"
-
-	"github.com/go-chi/chi/v5"
 )
 
 // UserRegisterHandler handles POST /api/v1/users/register
@@ -21,14 +19,13 @@ func UserRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	var req struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
-		IsAdmin  bool   `json:"is_admin"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil || req.Username == "" || req.Password == "" {
 		writeJSONError(w, http.StatusBadRequest, "Invalid JSON or missing fields")
 		return
 	}
 	token, _ := GenerateToken()
-	user, err := db.CreateUser(req.Username, req.Password, req.IsAdmin, token)
+	user, err := db.CreateUser(req.Username, req.Password, false, token)
 	if err != nil {
 		writeJSONError(w, http.StatusBadRequest, err.Error())
 		return
@@ -67,49 +64,6 @@ func UserLogInHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"status": "success",
 		"token":  user.Token,
-	})
-}
-
-// UserAPIKeyHandler handles POST /api/v1/users/{username}/apikeys
-func UserAPIKeyHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		writeJSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
-		return
-	}
-	targetUsername := chi.URLParam(r, "username")
-	if targetUsername == "" {
-		writeJSONError(w, http.StatusNotFound, "Not found: username missing")
-		return
-	}
-
-	// Authenticate the caller (must be the user themselves or an admin)
-	authUsername, authPassword, authOK := getBasicAuth(r)
-	if !authOK {
-		writeJSONError(w, http.StatusUnauthorized, "Authentication required")
-		return
-	}
-	authedUser, err := db.AuthenticateUser(authUsername, authPassword)
-	if err != nil {
-		writeJSONError(w, http.StatusUnauthorized, "Invalid credentials")
-		return
-	}
-	if authedUser.Username != targetUsername && !authedUser.IsAdmin {
-		writeJSONError(w, http.StatusForbidden, "Not authorized to generate API key for this user")
-		return
-	}
-
-	// Generate API key
-	key, _ := GenerateToken()
-	err = db.GenerateAPIKey(authedUser.ID, key)
-	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"status":  "success",
-		"api_key": key,
 	})
 }
 
