@@ -1,6 +1,6 @@
 name: "✨ Enhancement"
 description: Suggest an improvement or new feature
-labels: ["triage: enhancement"]
+labels: ["enhancement"]
 body:
   - type: markdown
     attributes:

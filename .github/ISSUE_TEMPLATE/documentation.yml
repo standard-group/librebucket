@@ -1,6 +1,6 @@
 name: "📘 Documentation"
 description: Suggest improvements or report issues with documentation
-labels: ["triage: documentation"]
+labels: ["documentation"]
 body:
   - type: markdown
     attributes:

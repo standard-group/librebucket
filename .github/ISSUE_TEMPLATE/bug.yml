@@ -1,6 +1,6 @@
 name: "🐞 Bug Report"
 description: Report a problem or unexpected behavior
-labels: ["triage: bug"]
+labels: ["bug"]
 body:
   - type: markdown
     attributes:
