@@ -1,0 +1,23 @@
+name: "❓ Question"
+description: Ask a question about the project
+labels: ["triage: question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have a question? We're here to help!
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: Please describe your question clearly.
+      placeholder: Ask your question here.
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context or details here.
