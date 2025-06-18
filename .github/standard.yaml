@@ -18,25 +18,25 @@ labels:
     delay: 15s
     comment: "Duplicate issue created! Closing in $DELAY . . ."
   invalid: close # use defaults for comment and delay time
-  stale: 
+  stale:
     action: close
     delay: 7 days
     comment: false # don't comment anything
   snooze:
     action: open
     delay: 7 days
-  'merge when passing': merge
+  "merge when passing": merge
   wontfix:
     action: close
     delay: 15s
-    comment: 'Issue was labeled as `wontfix`, since contributors/main'
-  approved: 
+    comment: "Issue was labeled as `wontfix`, since contributors/main"
+  approved:
     action: merge
     delay: 0s
-  'new contributor':
+  "new contributor":
     action: comment
     delay: 5s
-	  message: "Thanks for making your first contribution! :slightly_smiling_face:"
+    message: "Thanks for making your first contribution! :slightly_smiling_face:"
   bug:
     action: comment
     delay: 5s
@@ -63,21 +63,21 @@ merges:
 # All maintainer comments containing the pattern "duplicate of"
 # will apply the duplicate label
 comments:
-    # As of now `label` is the only valid action that can be triggered by 
-    # comments, and is a required field
+  # As of now `label` is the only valid action that can be triggered by
+  # comments, and is a required field
   - action: label
     # either a string or a string representation of a regular expresssion
     pattern: /duplicate of/i
-    labels: 
+    labels:
       - duplicate
     # delete comments that match a specific pattern. In this case, all comments
-    # that include "+1" will be deleted. 
+    # that include "+1" will be deleted.
   - action: delete_comment
     pattern: "$PROFANITY" # can also be a regular expression
 
   - action: label
     pattern: /\/remind/i
-    labels: 
+    labels:
       - remind
   - action: delete_comment
     pattern: /\/remind/i
@@ -87,34 +87,31 @@ comments:
 commits:
   - action: label
     pattern: /merge when passing/i
-    # specify which user this action applies to
     user: "maintainer"
-    labels: 
+    labels:
       - merge when passing
-    - action: label
+  - action: label
     pattern: BREAKING CHANGE
-    labels: 
+    labels:
       - Major Version
-	- action: label
-	  pattern: /perf.+?:/
-	  labels: 
-       - Major Version
-	- action: label
-	  pattern: /feat.+?:/
-	  labels: 
-	    - Minor Version
-	- action: label
-	  pattern: /fix.+?:/
-	  labels: 
-	    - Patch Version
+  - action: label
+    pattern: /perf.+?:/
+    labels:
+      - Major Version
+  - action: label
+    pattern: /feat.+?:/
+    labels:
+      - Minor Version
+  - action: label
+    pattern: /fix.+?:/
+    labels:
+      - Patch Version
 
 # [BETA]
 closes:
-# Lock an issue after the issue has been closed
+  # Lock an issue after the issue has been closed
   - action: lock
     delay: 5s
-  
-
 # [BETA] Labels that will be applied to issues/PRs when a sponsor opens them
 # sponsor_labels:
 #  - sponsor
