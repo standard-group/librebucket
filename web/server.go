@@ -40,7 +40,7 @@ func StartServer() {
 	// API endpoints
 	r.Post("/api/v1/users/register", api.UserRegisterHandler)
 	r.Post("/api/v1/users/login", api.UserLogInHandler)
-	r.Post("/api/v1/users/{username}/apikeys", api.UserAPIKeyHandler)
+	// r.Post("/api/v1/users/{username}/apikeys", api.UserAPIKeyHandler)
 	r.Post("/api/v1/git/create", api.APICreateRepoHandler)
 
 	// Commits API endpoints (mount ServeMux from api.CommitHandler)
@@ -80,6 +80,12 @@ func StartServer() {
 	}
 }
 
+func isSafeComponent(s string) bool {
+	return !strings.Contains(s, "/") &&
+		!strings.Contains(s, "\\") &&
+		!strings.Contains(s, "..")
+}
+
 // gitAndWebHandler routes requests for Git HTTP services and general web UI
 func gitAndWebHandler(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
@@ -88,6 +94,11 @@ func gitAndWebHandler(w http.ResponseWriter, r *http.Request) {
 	// Ensure repoName does not have .git suffix for consistency
 	if strings.HasSuffix(repoName, ".git") {
 		repoName = strings.TrimSuffix(repoName, ".git")
+	}
+
+	if !isSafeComponent(username) || !isSafeComponent(repoName) {
+		http.Error(w, "Invalid repo path", http.StatusBadRequest)
+		return
 	}
 
 	repoPath := filepath.Join("repos", username, repoName+".git")
@@ -116,6 +127,10 @@ func handleGitInfoRefs(w http.ResponseWriter, r *http.Request) {
 		repoName = strings.TrimSuffix(repoName, ".git")
 	}
 
+	if !isSafeComponent(username) || !isSafeComponent(repoName) {
+		http.Error(w, "Invalid repo path", http.StatusBadRequest)
+		return
+	}
 	repoPath := filepath.Join("repos", username, repoName+".git")
 
 	// Check if repository exists
@@ -157,7 +172,7 @@ func handleGitInfoRefs(w http.ResponseWriter, r *http.Request) {
 	// Execute git command
 	// --stateless-rpc --advertise-refs is for smart HTTP protocol for info/refs
 	// Pass the repository path relative to the working directory
-	cmd := exec.Command("git", gitService, "--stateless-rpc", "--advertise-refs", filepath.Base(repoPath))
+	cmd := exec.Command("git", gitService, "--stateless-rpc", "--advertise-refs", "--", filepath.Base(repoPath))
 	// Change working directory to the parent of the repository path
 	cmd.Dir = filepath.Dir(repoPath)
 
@@ -213,6 +228,10 @@ func handleGitService(w http.ResponseWriter, r *http.Request) {
 		repoName = strings.TrimSuffix(repoName, ".git")
 	}
 
+	if !isSafeComponent(username) || !isSafeComponent(repoName) {
+		http.Error(w, "Invalid repo path", http.StatusBadRequest)
+		return
+	}
 	repoPath := filepath.Join("repos", username, repoName+".git")
 
 	// Check if repository exists
@@ -246,7 +265,7 @@ func handleGitService(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cmd := exec.Command("git", gitServiceCmd, "--stateless-rpc", filepath.Base(repoPath))
+	cmd := exec.Command("git", gitServiceCmd, "--stateless-rpc", "--", filepath.Base(repoPath))
 	cmd.Dir = filepath.Dir(repoPath)
 
 	stdin, err := cmd.StdinPipe()

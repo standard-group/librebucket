@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/go-git/go-git/v5"
@@ -22,22 +24,47 @@ type RepoMeta struct {
 }
 
 // Metadata is stored in repos/{username}/{reponame}.meta.json
-const metadataFile = ".meta.json"
+const (
+	metadataFile    = ".meta.json"
+	safeRepoBaseDir = "repos"
+)
+
+func resolveSafePath(baseDir, relativePath string) (string, error) {
+	absPath, err := filepath.Abs(filepath.Join(baseDir, relativePath))
+	if err != nil {
+		return "", err
+	}
+	baseAbs, err := filepath.Abs(baseDir)
+	if err != nil {
+		return "", err
+	}
+	if !strings.HasPrefix(absPath, baseAbs) {
+		return "", fmt.Errorf("unsafe path: %s", absPath)
+	}
+	return absPath, nil
+}
 
 // SaveRepoMeta saves metadata for a repository
 func SaveRepoMeta(repoPath string, meta RepoMeta) error {
-	metaFilePath := repoPath + metadataFile
+	safeRepoPath, err := resolveSafePath(safeRepoBaseDir, repoPath)
+	if err != nil {
+		return fmt.Errorf("invalid repo path: %w", err)
+	}
+	metaFilePath := filepath.Join(safeRepoPath, metadataFile)
 	data, err := json.MarshalIndent(meta, "", "  ")
 	if err != nil {
 		return fmt.Errorf("failed to marshal repo metadata: %w", err)
 	}
-
 	return ioutil.WriteFile(metaFilePath, data, 0644)
 }
 
 // LoadRepoMeta loads metadata for a repository
 func LoadRepoMeta(repoPath string) (RepoMeta, error) {
-	metaFilePath := repoPath + metadataFile
+	safeRepoPath, err := resolveSafePath(safeRepoBaseDir, repoPath)
+	if err != nil {
+		return RepoMeta{}, fmt.Errorf("invalid repo path: %w", err)
+	}
+	metaFilePath := filepath.Join(safeRepoPath, metadataFile)
 	data, err := ioutil.ReadFile(metaFilePath)
 	if err != nil {
 		return RepoMeta{}, fmt.Errorf("failed to read repo metadata: %w", err)
@@ -80,8 +107,12 @@ func CloneRepo(url, directory string) error {
 
 // CreateRepo initializes a new git repository in the specified directory and saves metadata
 func CreateRepo(repoPath, owner string, public bool) error {
-	// Create as bare repository for server-side hosting
-	_, err := git.PlainInit(repoPath, true) // true = bare repository
+	safeRepoPath, err := resolveSafePath(safeRepoBaseDir, repoPath)
+	if err != nil {
+		return fmt.Errorf("invalid repo path: %w", err)
+	}
+
+	_, err = git.PlainInit(safeRepoPath, true)
 	if err != nil {
 		return fmt.Errorf("failed to create repo: %w", err)
 	}
@@ -90,7 +121,7 @@ func CreateRepo(repoPath, owner string, public bool) error {
 		Owner:      owner,
 		Public:     public,
 		StarsCount: 0,
-		LastCommit: "", // Initialize with empty last commit
+		LastCommit: "",
 		ForksCount: 0,
 		Languages:  make(map[string]float64),
 		CreatedAt:  time.Now(),
