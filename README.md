@@ -6,6 +6,7 @@
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/standard-group/librebucket)](https://goreportcard.com/report/github.com/standard-group/librebucket) 
 [![License: GPLv3 or later](https://img.shields.io/badge/License-GPLv3-yellow.svg)](https://opensource.org/license/gpl-3-0)
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/standard-group/librebucket?utm_source=oss&utm_medium=github&utm_campaign=standard-group%2Flibrebucket&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
 A lightweight, self-hosted Git server with a clean web interface, built with Go.
 
