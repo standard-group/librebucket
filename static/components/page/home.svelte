@@ -50,8 +50,8 @@
             Easy to install and low maintenance, it just does the job.
           </p>
           <p class="instance-notice">
-            You are currently visiting an instance, means that we do not owned
-            it and, we are not responsible for any things which on this forge.
+            You are currently visiting an instance, which means that we do not own
+            it and we are not responsible for anything on this forge.
           </p>
           <div class="button-group">
             <button
