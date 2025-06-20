@@ -1,6 +1,6 @@
 <!-- TEXT_SECTION:header:START -->
 <p align="center">
-   <img width="256" src="./docs/images/new-librebucket-logo.svg" alt="Librebucket Logo">
+   <img width="256" src="./docs/images/new-librebucket-logo-with-bg.svg" alt="Librebucket Logo">
 </p>
 <h1 align="center">
    Librebucket
