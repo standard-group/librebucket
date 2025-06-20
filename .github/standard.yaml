@@ -1,27 +1,18 @@
-# .github/standard.yaml test
 default:
   close:
-    # Default time to wait before closing the label. Can either be a number in milliseconds
-    # or a string specified by the `ms` package (https://www.npmjs.com/package/ms)
     delay: "3 days"
-
-    # Default comment to post when an issue is first marked with a closing label
-    #
-    #   $DELAY will automatically be replaced with `delay` as a formatted string (e.g. '7 days')
-    #   $LABEL will automatically be replaced with the label's name
     comment: "⚠️ This issue has been marked $LABEL and will be closed in $DELAY."
 
-# Map from each label name to its configuration
 labels:
   duplicate:
     action: close
     delay: 15s
     comment: "Duplicate issue created! Closing in $DELAY . . ."
-  invalid: close # use defaults for comment and delay time
+  invalid: close
   stale:
     action: close
     delay: 7 days
-    comment: false # don't comment anything
+    comment: false
   snooze:
     action: open
     delay: 7 days
@@ -32,7 +23,6 @@ labels:
     comment: "Issue was labeled as `wontfix`, since contributors/main"
   approved:
     action: merge
-    delay: 0s
   "new contributor":
     action: comment
     delay: 5s
@@ -53,37 +43,61 @@ labels:
     action: comment
     delay: 5s
     message: "Thank you for contributing to the documentation! If you have more something to say/add, please comment down below."
+  abandoned:
+    action: close
+    delay: 60d
+    comment: "This PR has been inactive for 60 days and is now closed. If you're still working on it, feel free to reopen."
+  wip:
+    action: block_merge
+    comment: "⛔ This PR is marked as Work In Progress. Please remove 'WIP' from the title to enable merge."
 
 merges:
-  # Delete branch after merging the PR
   - action: delete_branch
-  # Create a new tag after merging the PR
+    unless:
+      branches:
+        - main
+        - master
+        - release/.*
+        - protected/.*
+        - dev
   - action: tag
 
-# All maintainer comments containing the pattern "duplicate of"
-# will apply the duplicate label
 comments:
-  # As of now `label` is the only valid action that can be triggered by
-  # comments, and is a required field
   - action: label
-    # either a string or a string representation of a regular expresssion
     pattern: /duplicate of/i
     labels:
       - duplicate
-    # delete comments that match a specific pattern. In this case, all comments
-    # that include "+1" will be deleted.
   - action: delete_comment
-    pattern: "$PROFANITY" # can also be a regular expression
-
+    pattern: "$PROFANITY"
   - action: label
-    pattern: /\/remind/i
+    pattern: /\\/remind/i
     labels:
       - remind
   - action: delete_comment
-    pattern: /\/remind/i
+    pattern: /\\/remind/i
+  - action: merge
+    pattern: /merge when passing/i
+  - action: comment
+    pattern: /\\/check-status/i
+    message: "✅ Checking status... please wait while I ping CI or reviewers."
+  - action: comment
+    pattern: /\\/ping-bot/i
+    message: "👋 I'm here and working fine!"
+  - action: reopen
+    pattern: /\\/reopen/i
+  - action: close
+    pattern: /\\/close/i
+  - action: assign
+    pattern: /\\/assign @(\w+)/i
+    assignee: "$1"
+  - action: comment
+    pattern: /ready for review/i
+    message: "🔍 This PR is now ready for review! Maintainers, please take a look."
+  - action: label
+    pattern: /\bWIP\b/i
+    labels:
+      - wip
 
-# Same as `comments` except Ranger will look in the body of new commits
-# that are pushed to a pull request
 commits:
   - action: label
     pattern: /merge when passing/i
@@ -107,11 +121,15 @@ commits:
     labels:
       - Patch Version
 
-# [BETA]
-closes:
-  # Lock an issue after the issue has been closed
-  - action: lock
-    delay: 5s
-# [BETA] Labels that will be applied to issues/PRs when a sponsor opens them
-# sponsor_labels:
-#  - sponsor
+# closes:
+#  - action: lock
+#    comment: "🔒 Locked as resolved/inactive. Feel free to reopen or create a new issue if needed."
+
+branches:
+  ignore:
+    - bot/.*
+    - ci/.*
+    - dev
+    - main
+    - master
+    - trunk

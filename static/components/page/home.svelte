@@ -5,9 +5,11 @@
     isDarkMode = !isDarkMode;
   }
 
-  let logoSrc = isDarkMode
-    ? "img/new-librebucket-logo-white.svg"
-    : "img/new-librebucket-logo.svg";
+  let logoSrc = $derived(
+    isDarkMode
+      ? "img/new-librebucket-logo-white.svg"
+      : "img/new-librebucket-logo.svg"
+  );
 
   function goToLogin() {
     window.location.href = "/login";
@@ -16,7 +18,7 @@
 
 <svelte:head>
   <title>Librebucket</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </svelte:head>
 
 <div class="app" class:dark={isDarkMode} class:light={!isDarkMode}>
@@ -37,7 +39,9 @@
         <div class="hero-content">
           <h1 class="main-title">Librebucket</h1>
           <p class="hero-subtitle">
-            Create the future, <a href="https://example.com" class="hero-link">commit after commit</a>
+            Create the future, <a href="https://example.com" class="hero-link"
+              >commit after commit</a
+            >
           </p>
           <p class="hero-description">
             Librebucket is a self-hosted lightweight software forge.
@@ -46,10 +50,14 @@
             Easy to install and low maintenance, it just does the job.
           </p>
           <p class="instance-notice">
-            You are currently visiting an instance, means that we do not owned it and, we are not responsible for any things which on this forge.
+            You are currently visiting an instance, means that we do not owned
+            it and, we are not responsible for any things which on this forge.
           </p>
           <div class="button-group">
-            <button class="btn btn-primary" onclick={() => window.location.href = '/register'}>
+            <button
+              class="btn btn-primary"
+              onclick={() => (window.location.href = "/register")}
+            >
               Join &amp; register
             </button>
             <button class="btn btn-secondary" onclick={goToLogin}>
@@ -71,7 +79,8 @@
             <div>
               <h3>Lightweight &amp; fast</h3>
               <p>
-                Librebucket is less than 500MB and lightning fast, even Raspberry Pi can run it!
+                Librebucket is less than 500MB and lightning fast, even
+                Raspberry Pi can run it!
               </p>
             </div>
           </div>
@@ -80,7 +89,8 @@
             <div>
               <h3>Coffee To Go, easy install &amp; maintain</h3>
               <p>
-                Our "bucket" is packed with tools and stuff already, for developers, by developers.
+                Our "bucket" is packed with tools and stuff already, for
+                developers, by developers.
               </p>
             </div>
           </div>
@@ -89,7 +99,8 @@
             <div>
               <h3>Self-hosted alternative to GitHub and GitLab</h3>
               <p>
-                GitHub and GitLab are full of telemetry. Librebucket is an awesome alternative!
+                GitHub and GitLab are full of telemetry. Librebucket is an
+                awesome alternative!
               </p>
             </div>
           </div>
@@ -98,7 +109,8 @@
             <div>
               <h3>100% Free and OSS</h3>
               <p>
-                Standard Group loves open-source. Librebucket will be forever free and open-source!
+                Standard Group loves open-source. Librebucket will be forever
+                free and open-source!
               </p>
             </div>
           </div>
@@ -108,7 +120,9 @@
       <section class="contribute-section">
         <h2 class="section-title">Get Involved</h2>
         <p class="contribute-description">
-          Librebucket is made by many motivated people, and we are looking forward to your contribution. Small or big contributions, you are still making big steps for Librebucket.
+          Librebucket is made by many motivated people, and we are looking
+          forward to your contribution. Small or big contributions, you are
+          still making big steps for Librebucket.
         </p>
         <div class="contribute-buttons">
           <button class="btn btn-contribute">
@@ -130,7 +144,8 @@
         <p>Version: 0.0.0-debug</p>
         <p>This home page is running on Librebucket</p>
         <p>
-          Copyright © 2025 Librebucket authors. Content available under CC BY-SA 4.0.
+          Copyright © 2025 Librebucket authors. Content available under CC
+          BY-SA 4.0.
         </p>
         <p>Credit to the Forgejo's contributors for design inspiration.</p>
       </div>
@@ -181,7 +196,13 @@
 
   .app {
     min-height: 100vh;
-    font-family: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family:
+      "Noto Sans",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      sans-serif;
     display: flex;
     flex-direction: column;
     transition: all 0.3s ease;
@@ -241,15 +262,18 @@
   }
 
   .app.light .feature-item img {
-    filter: invert(20%) sepia(92%) saturate(879%) hue-rotate(187deg) brightness(97%) contrast(87%);
+    filter: invert(20%) sepia(92%) saturate(879%) hue-rotate(187deg)
+      brightness(97%) contrast(87%);
   }
 
   .app.light .footer img {
-    filter: invert(40%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(60%) contrast(100%);
+    filter: invert(40%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(60%)
+      contrast(100%);
   }
 
   .app.light .btn img {
-    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg)
+      brightness(100%) contrast(100%);
   }
 
   .header {
@@ -417,7 +441,8 @@
   .btn img {
     width: 20px;
     height: 20px;
-    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg)
+      brightness(100%) contrast(100%);
   }
 
   .hero-image {
@@ -482,7 +507,8 @@
   .feature-item img {
     width: 50px;
     height: 50px;
-    filter: invert(40%) sepia(92%) saturate(879%) hue-rotate(187deg) brightness(97%) contrast(87%);
+    filter: invert(40%) sepia(92%) saturate(879%) hue-rotate(187deg)
+      brightness(97%) contrast(87%);
     flex-shrink: 0;
   }
 
@@ -578,7 +604,8 @@
   .footer-right img {
     width: 28px;
     height: 28px;
-    filter: invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%) contrast(100%);
+    filter: invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%)
+      contrast(100%);
   }
 
   /* Mobile-first responsive design */
