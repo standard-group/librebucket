@@ -1,16 +1,27 @@
-<div style="background: #f0f0f0; padding: 20px; display: inline-block;">
-   <img src="./docs/images/new-librebucket-logo.svg">
-</div>
+<!-- TEXT_SECTION:header:START -->
+<p align="center">
+   <img width="256" src="./docs/images/new-librebucket-logo-with-bg.svg" alt="Librebucket Logo">
+</p>
+<h1 align="center">
+   Librebucket
+</h1>
+<h4 align="center">
+   A lightweight, self-hosted Git server with a clean web interface, built with Go.
+</h4>
+<p align="center">
+   <a href="https://goreportcard.com/report/github.com/standard-group/librebucket">
+      <img src="https://goreportcard.com/badge/github.com/standard-group/librebucket" alt="Librebucket's Go Report Card">
+   </a>
+   <a href="https://opensource.org/license/gpl-3-0">
+      <img src="https://img.shields.io/badge/License-GPLv3-yellow.svg" alt="Librebucket is licensed under GPLv3 or later">
+   </a>
+   <a href="https://coderabbit.ai">
+      <img src="https://img.shields.io/coderabbit/prs/github/standard-group/librebucket?utm_source=oss&utm_medium=github&utm_campaign=standard-group%2Flibrebucket&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews" alt="CodeRabbit Pull Request Reviews">
+   </a>
+</p>
+<!-- TEXT_SECTION:header:END -->
 
-# Librebucket
-
-[![Go Report Card](https://goreportcard.com/badge/github.com/standard-group/librebucket)](https://goreportcard.com/report/github.com/standard-group/librebucket) 
-[![License: GPLv3 or later](https://img.shields.io/badge/License-GPLv3-yellow.svg)](https://opensource.org/license/gpl-3-0)
-![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/standard-group/librebucket?utm_source=oss&utm_medium=github&utm_campaign=standard-group%2Flibrebucket&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
-
-A lightweight, self-hosted Git server with a clean web interface, built with Go.
-
-Are you tired of big companies playing with your repositories, by removing them or trading with your data? Want to provide a small and free Git hosting for your community, friends or company? Then Librebucket (*/ˈliːbrə ˈbʌkɪt/*) for you, we promise that Librebucket will be **"independent Free/Libre Software forever"**!
+Are you tired of big companies playing with your repositories, by removing them or trading with your data? Want to provide a small and free Git hosting for your community, friends or company? Then Librebucket (_/ˈliːbrə ˈbʌkɪt/_) for you, we promise that Librebucket will be **"independent Free/Libre Software forever"**!
 
 ## Getting Started
 
