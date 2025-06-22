@@ -25,3 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+
+function goToLogin() {
+  window.location.href = "/login";
+}

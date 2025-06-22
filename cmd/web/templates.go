@@ -1,38 +1,56 @@
 package web
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
-	"os"
 	"path/filepath"
-	"sync"
 )
 
-var (
-	templates *template.Template
-	once      sync.Once
-)
+var templates *template.Template
 
-func LoadTemplates() {
-	once.Do(func() {
-		baseDir, err := os.Getwd()
-		if err != nil {
-			log.Fatalf("Failed to get working directory: %v", err)
-		}
+func init() {
+	// Initialize templates map
+	templates = template.New("")
+	templateFiles, err := filepath.Glob("cmd/web/templates/page/*.tmpl")
+	if err != nil {
+		log.Fatalf("Failed to find template files: %v", err)
+	}
 
-		pattern := filepath.Join(baseDir, "cmd", "web", "templates", "page", "*.tmpl")
-		templates, err = template.ParseGlob(pattern)
-		if err != nil {
-			log.Fatalf("Failed to parse templates: %v", err)
-		}
-	})
+	layoutFiles, err := filepath.Glob("cmd/web/templates/layout/*.tmpl")
+	if err != nil {
+		log.Fatalf("Failed to find layout files: %v", err)
+	}
+
+	allFiles := append(templateFiles, layoutFiles...)
+
+	if len(allFiles) == 0 {
+		log.Println("No template files found.")
+		return
+	}
+
+	// Parse all template files
+	templates, err = template.ParseFiles(allFiles...)
+	if err != nil {
+		log.Fatalf("Failed to parse templates: %v", err)
+	}
+	log.Println("Successfully parsed all template files.")
 }
 
 func RenderTemplate(name string, data any, w http.ResponseWriter) {
-	LoadTemplates()
-	err := templates.ExecuteTemplate(w, name, data)
+	// Ensure the template exists
+	tmpl := templates.Lookup(name)
+	if tmpl == nil {
+		http.Error(w, fmt.Sprintf("The template %s does not exist.", name), http.StatusInternalServerError)
+		log.Printf("Template not found: %s", name)
+		return
+	}
+
+	// Execute the template with the provided data
+	err := tmpl.Execute(w, data)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Failed to render template", http.StatusInternalServerError)
+		log.Printf("Error executing template %s: %v", name, err)
 	}
 }

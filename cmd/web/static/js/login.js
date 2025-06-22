@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const isPassword = passwordInput.type === "password";
       passwordInput.type = isPassword ? "text" : "password";
       eyeIcon.src = isPassword
-        ? "/static/components/img/eye-off.svg"
-        : "/static/components/img/eye.svg";
+        ? "/static/img/eye-off.svg"
+        : "/static/img/eye.svg";
       eyeIcon.alt = isPassword ? "Hide password" : "Show password";
     });
   }

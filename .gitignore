@@ -89,4 +89,7 @@ secrets.yaml
 __debug_bin
 
 users.db
-/configs/data/users.db
+/configs/data/users.db4
+
+private.asc
+build.config.ini

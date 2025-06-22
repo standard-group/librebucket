@@ -16,13 +16,14 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/HazelnutParadise/sveltigo"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
 	api "librebucket/cmd/api/v1"
 	"librebucket/cmd/db"
 	"librebucket/cmd/git"
+
+	"gopkg.in/yaml.v3"
 )
 
 // StartServer starts the web server for LibreBucket
@@ -46,19 +47,14 @@ func StartServer() {
 	api.CommitHandler(commitMux)
 	r.Mount("/api/v1/repos", commitMux)
 
-	// Serve static files
-	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	r.Handle("/css/*", http.StripPrefix("/css/", http.FileServer(http.Dir("static/components/css"))))
-	r.Handle("/js/*", http.StripPrefix("/js/", http.FileServer(http.Dir("static/components/js"))))
-	r.Handle("/img/*", http.StripPrefix("/img/", http.FileServer(http.Dir("static/components/img"))))
+	// Serve static files from the cmd/web/static directory
+	fs := http.FileServer(http.Dir("cmd/web/static"))
+	r.Handle("/static/*", http.StripPrefix("/static/", fs))
 
-	// Generic handler for root, repo pages, and Git HTTP services
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		RenderTemplate("home.tmpl", nil, w)
-	})
-	r.Get("/login", func(w http.ResponseWriter, r *http.Request) {
-		RenderTemplate("login.tmpl", nil, w)
-	})
+	// Page handlers
+	r.Get("/", homeHandler)
+	r.Post("/set-lang", setLangHandler)
+	r.Get("/login", loginHandler)
 
 	// Git HTTP services
 	r.Get("/{username}/{repoName}.git/info/refs", handleGitInfoRefs)
@@ -109,12 +105,15 @@ func gitAndWebHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Serve dynamic web UI for a repository using golte.RenderPage
-	sveltigo.RenderPage(w, r, "components/page/repo", map[string]any{
+	// Data to pass to the template
+	data := map[string]any{
 		"username": username,
 		"repoName": repoName,
 		"cloneUrl": fmt.Sprintf("http://%s/%s/%s.git", r.Host, username, repoName),
-	})
+	}
+
+	// Render the Go HTML template
+	RenderTemplate("repo.tmpl", data, w)
 }
 
 // handleGitInfoRefs handles GET/HEAD /username/repo[.git]/info/refs
@@ -400,6 +399,76 @@ func checkRepoAuth(r *http.Request, repoPath, action, expectedOwner string) bool
 
 	// For push (git-receive-pack) and other write actions: only owner can push
 	return isOwnerAuthenticated(r, meta)
+}
+
+// getLang gets language from cookie, defaults to "en"
+func getLang(r *http.Request) string {
+	cookie, err := r.Cookie("lang")
+	if err == nil && len(cookie.Value) == 2 {
+		return cookie.Value
+	}
+	return "en"
+}
+
+// loadTranslations loads translations from a YAML file for a given page and language
+func loadTranslations(lang, page string) (map[string]any, error) {
+	path := fmt.Sprintf("cmd/web/i18n/langs/%s/%s.yaml", lang, page)
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	var m map[string]any
+	if err := yaml.NewDecoder(f).Decode(&m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// homeHandler serves the home page with translations
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	lang := getLang(r)
+	trans, err := loadTranslations(lang, "home")
+	if err != nil {
+		// Fallback to English if the language file is missing or fails to parse
+		log.Printf("Could not load translations for lang '%s': %v. Falling back to 'en'.", lang, err)
+		trans, _ = loadTranslations("en", "home")
+	}
+
+	data := map[string]any{
+		"Trans": trans,
+		"Lang":  lang,
+	}
+	RenderTemplate("home.tmpl", data, w)
+}
+
+// loginHandler serves the login page with translations
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	lang := getLang(r)
+	trans, err := loadTranslations(lang, "login")
+	if err != nil {
+		log.Printf("Could not load translations for lang '%s': %v. Falling back to 'en'.", lang, err)
+		trans, _ = loadTranslations("en", "login") // fallback
+	}
+	RenderTemplate("login.tmpl", map[string]any{
+		"Trans": trans,
+		"Lang":  lang,
+	}, w)
+}
+
+// setLangHandler sets the language cookie
+func setLangHandler(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err == nil {
+		lang := r.FormValue("lang")
+		http.SetCookie(w, &http.Cookie{
+			Name:   "lang",
+			Value:  lang,
+			Path:   "/",
+			MaxAge: 86400 * 365, // 1 year
+		})
+	}
+	// Redirect back to the previous page
+	http.Redirect(w, r, r.Referer(), http.StatusSeeOther)
 }
 
 // GenerateToken creates a 32-character alphanumeric token

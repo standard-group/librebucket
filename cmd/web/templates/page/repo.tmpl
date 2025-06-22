@@ -1,0 +1,32 @@
+{{define "repo.tmpl"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.repoName}} - Librebucket</title>
+    <link rel="stylesheet" href="/static/css/for_home_login.css" />
+</head>
+<body class="{{if .IsDarkMode}}dark{{else}}light{{end}}">
+    <div class="app">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="/static/img/new-librebucket-logo.svg" alt="Librebucket logo" />
+                </div>
+                <a href="/login" class="btn btn-secondary">Sign In</a>
+            </div>
+        </header>
+        <main class="main">
+            <h1>Repository: {{.username}}/{{.repoName}}</h1>
+            <p>This is the repository view page.</p>
+            
+            <div class="clone-section">
+                <label for="cloneUrl">Clone URL:</label>
+                <input type="text" id="cloneUrl" value="{{.cloneUrl}}" readonly>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
+{{end}} 

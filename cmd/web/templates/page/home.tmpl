@@ -1,110 +1,123 @@
 {{define "home.tmpl"}}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{.Lang}}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Librebucket</title>
+    <title>{{.Trans.title}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/home.css" />
     <script src="/static/js/home.js"></script>
   </head>
-  <body>
-    <div class="app {{if .IsDarkMode}}dark{{else}}light{{ end }}">
+  <body class="{{if .IsDarkMode}}dark{{else}}light{{end}}">
+    <div class="app">
       <header class="header">
         <div class="header-content">
           <div class="logo">
             <img
-              src="/static/components/img/new-librebucket-logo.svg"
+              src="/static/img/new-librebucket-logo.svg"
               alt="Librebucket logo"
             />
           </div>
-          <button class="theme-toggle" type="button">
-            {{if .IsDarkMode}}☀️{{else}}🌙{{ end }}
-          </button>
+          <div class="header-controls">
+            <form id="lang-form" method="post" action="/set-lang" class="lang-form">
+              <select name="lang" onchange="document.getElementById('lang-form').submit()" class="lang-select">
+                <option value="en" {{if eq .Lang "en"}}selected{{end}}>English</option>
+                <option value="es" {{if eq .Lang "es"}}selected{{end}}>Español</option>
+                <option value="fr" {{if eq .Lang "fr"}}selected{{end}}>Français</option>
+                <option value="hu" {{if eq .Lang "hu"}}selected{{end}}>Magyar</option>
+                <option value="lt" {{if eq .Lang "lt"}}selected{{end}}>Lietuvių</option>
+                <option value="pl" {{if eq .Lang "pl"}}selected{{end}}>Polski</option>
+                <option value="ru" {{if eq .Lang "ru"}}selected{{end}}>Русский</option>
+                <option value="ua" {{if eq .Lang "ua"}}selected{{end}}>Українська</option>
+              </select>
+            </form>
+            <button class="theme-toggle" type="button">
+              {{if .IsDarkMode}}☀️{{else}}🌙{{ end }}
+            </button>
+          </div>
         </div>
       </header>
       <main class="main">
         <div class="main-content">
           <section class="hero-section">
             <div class="hero-content">
-              <h1 class="main-title">Librebucket</h1>
+              <h1 class="main-title">{{.Trans.title}}</h1>
               <p class="hero-subtitle">
-                Create the future,
-                <a href="https://example.com" class="hero-link"
-                  >commit after commit</a
-                >
+                {{ index .Trans.tagline 0 }}
+                <a href="https://example.com" class="hero-link">{{ index .Trans.tagline 1 }}</a>
               </p>
               <p class="hero-description">
-                Librebucket is a self-hosted lightweight software forge.
+                {{.Trans.intro.line1}}
               </p>
               <p class="hero-description">
-                Easy to install and low maintenance, it just does the job.
+                {{.Trans.intro.line2}}
               </p>
               <p class="instance-notice">
-                You are currently visiting a third-party instance. This means we do not
-                own it and are not responsible for any content or actions on this forge.
+                {{ index .Trans.third_party_notice 0 }}
+                {{ index .Trans.third_party_notice 1 }}
               </p>
               <div class="button-group">
-                <button class="btn btn-primary">Join &amp; register</button>
-                <button class="btn btn-secondary" onclick="goToLogin()">
-                  Sign In
-                </button>
+                <a href="/register" class="btn btn-primary">{{.Trans.buttons.join_register}}</a>
+                <a href="/login" class="btn btn-secondary">{{.Trans.buttons.sign_in}}</a>
               </div>
             </div>
             <div class="hero-image">
               <img
                 class="group-4"
-                src="/static/components/img/group-10-1.svg"
+                src="/static/img/group-10-1.svg"
                 alt=""
               />
               <img
                 class="group-5"
-                src="/static/components/img/group-17-1.svg"
+                src="/static/img/group-17-1.svg"
                 alt=""
               />
             </div>
           </section>
 
           <section class="features-section">
-            <h2 class="section-title">Why Librebucket?</h2>
+            <h2 class="section-title">{{.Trans.why.headline}}</h2>
             <div class="feature-grid">
               <div class="feature-item">
-                <img src="/static/components/img/feather.svg" alt="" />
+                <img src="/static/img/feather.svg" alt="" />
                 <div>
-                  <h3>Lightweight &amp; fast</h3>
+                  <h3>{{.Trans.why.subtitle}}</h3>
                   <p>
-                    Librebucket is less than 500MB and lightning fast, even
-                    Raspberry Pi can run it!
+                    {{ index .Trans.features.size_speed 0 }}
+                    {{ index .Trans.features.size_speed 1 }}
                   </p>
                 </div>
               </div>
               <div class="feature-item">
-                <img src="/static/components/img/coffee-to-go.svg" alt="" />
+                <img src="/static/img/coffee-to-go.svg" alt="" />
                 <div>
-                  <h3>Coffee To Go, easy install &amp; maintain</h3>
+                  <h3>{{.Trans.features.coffee}}</h3>
                   <p>
-                    Our "bucket" is packed with tools and stuff already, for
-                    developers, by developers.
+                    {{ index .Trans.features.tools 0 }}
+                    {{ index .Trans.features.tools 1 }}
                   </p>
                 </div>
               </div>
               <div class="feature-item">
-                <img src="/static/components/img/git.svg" alt="" />
+                <img src="/static/img/git.svg" alt="" />
                 <div>
-                  <h3>Self-hosted alternative to GitHub and GitLab</h3>
+                  <h3>{{ index .Trans.features.self_hosted 0 }}</h3>
                   <p>
-                    GitHub and GitLab are full of telemetry. Librebucket is an
-                    awesome alternative!
+                    {{ index .Trans.features.telemetry 0 }}
+                    {{ index .Trans.features.telemetry 1 }}
                   </p>
                 </div>
               </div>
               <div class="feature-item">
-                <img src="/static/components/img/heart-cog.svg" alt="" />
+                <img src="/static/img/heart-cog.svg" alt="" />
                 <div>
-                  <h3>100% Free and OSS</h3>
+                  <h3>{{ index .Trans.features.open_source 0 }}</h3>
                   <p>
-                    Standard Group loves open-source. Librebucket will be
-                    forever free and open-source!
+                    {{ index .Trans.features.open_source 1 }}
+                    {{ index .Trans.features.open_source 2 }}
                   </p>
                 </div>
               </div>
@@ -112,20 +125,20 @@
           </section>
 
           <section class="contribute-section">
-            <h2 class="section-title">Get Involved</h2>
+            <h2 class="section-title">{{.Trans.get_involved.title}}</h2>
             <p class="contribute-description">
-              Librebucket is made by many motivated people, and we are looking
-              forward to your contribution. Small or big contributions, you are
-              still making big steps for Librebucket.
+              {{ index .Trans.get_involved.text 0 }}
+              {{ index .Trans.get_involved.text 1 }}
+              {{ index .Trans.get_involved.text 2 }}
             </p>
             <div class="contribute-buttons">
               <button class="btn btn-contribute">
-                <img src="/static/components/img/github.svg" alt="" />
-                Contribute on Github
+                <img src="/static/img/github.svg" alt="" />
+                {{.Trans.buttons.contribute}}
               </button>
               <button class="btn btn-donate">
-                <img src="/static/components/img/heart-cog.svg" alt="" />
-                Donate
+                <img src="/static/img/heart-cog.svg" alt="" />
+                {{.Trans.buttons.donate}}
               </button>
             </div>
           </section>
@@ -134,21 +147,21 @@
       <footer class="footer">
         <div class="footer-content">
           <div class="footer-left">
-            <p>Version: {{.AppVersion}}</p>
-            <p>This home page is running on Librebucket</p>
+            <p>{{.Trans.footer.version}}: {{.AppVersion}}</p>
+            <p>{{.Trans.footer.running}}</p>
             <p>
-              Copyright © 2025 Librebucket authors. Content available under CC
-              BY-SA 4.0.
+              {{ index .Trans.footer.copyright 0 }}
+              {{ index .Trans.footer.copyright 1 }}
             </p>
-            <p>Credit to the Forgejo's contributors for design inspiration.</p>
+            <p>{{.Trans.footer.credits}}</p>
           </div>
           <div class="footer-right">
-            <a href="https://example.com">Licenses</a>
+            <a href="https://example.com">{{.Trans.footer.licenses}}</a>
             <a href="https://example.com"
-              ><img src="/static/components/img/api.svg" alt=""
+              ><img src="/static/img/api.svg" alt="API"
             /></a>
             <a href="https://example.com"
-              ><img src="/static/components/img/github.svg" alt=""
+              ><img src="/static/img/github.svg" alt="GitHub"
             /></a>
           </div>
         </div>
