@@ -20,9 +20,5 @@
   "bugs": {
     "url": "https://github.com/standard-group/librebucket/issues"
   },
-  "homepage": "https://github.com/standard-group/librebucket#readme",
-  "dependencies": {
-    "golte": "^0.1.2",
-    "svelte": "^5.0.0"
-  }
+  "homepage": "https://github.com/standard-group/librebucket#readme"
 }

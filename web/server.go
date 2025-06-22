@@ -20,7 +20,6 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
-	"librebucket/dist"
 	api "librebucket/internal/api/v1"
 	"librebucket/internal/db"
 	"librebucket/internal/git"
@@ -35,7 +34,6 @@ func StartServer() {
 
 	// Middleware: Request logging
 	r.Use(middleware.Logger)
-	r.Use(dist.Sveltigo)
 
 	// API endpoints
 	r.Post("/api/v1/users/register", api.UserRegisterHandler)
@@ -55,8 +53,12 @@ func StartServer() {
 	r.Handle("/img/*", http.StripPrefix("/img/", http.FileServer(http.Dir("static/components/img"))))
 
 	// Generic handler for root, repo pages, and Git HTTP services
-	r.Get("/", sveltigo.Page("components/page/home"))
-	r.Get("/login", sveltigo.Page("components/page/login"))
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		RenderTemplate("home.tmpl", nil, w)
+	})
+	r.Get("/login", func(w http.ResponseWriter, r *http.Request) {
+		RenderTemplate("login.tmpl", nil, w)
+	})
 
 	// Git HTTP services
 	r.Get("/{username}/{repoName}.git/info/refs", handleGitInfoRefs)
@@ -92,9 +94,7 @@ func gitAndWebHandler(w http.ResponseWriter, r *http.Request) {
 	repoName := chi.URLParam(r, "repoName")
 
 	// Ensure repoName does not have .git suffix for consistency
-	if strings.HasSuffix(repoName, ".git") {
-		repoName = strings.TrimSuffix(repoName, ".git")
-	}
+	repoName = strings.TrimSuffix(repoName, ".git")
 
 	if !isSafeComponent(username) || !isSafeComponent(repoName) {
 		http.Error(w, "Invalid repo path", http.StatusBadRequest)
@@ -123,9 +123,7 @@ func handleGitInfoRefs(w http.ResponseWriter, r *http.Request) {
 	repoName := chi.URLParam(r, "repoName")
 
 	// Ensure repoName does not have .git suffix for consistency
-	if strings.HasSuffix(repoName, ".git") {
-		repoName = strings.TrimSuffix(repoName, ".git")
-	}
+	repoName = strings.TrimSuffix(repoName, ".git")
 
 	if !isSafeComponent(username) || !isSafeComponent(repoName) {
 		http.Error(w, "Invalid repo path", http.StatusBadRequest)
@@ -224,9 +222,7 @@ func handleGitService(w http.ResponseWriter, r *http.Request) {
 	repoName := chi.URLParam(r, "repoName")
 
 	// Ensure repoName does not have .git suffix for consistency
-	if strings.HasSuffix(repoName, ".git") {
-		repoName = strings.TrimSuffix(repoName, ".git")
-	}
+	repoName = strings.TrimSuffix(repoName, ".git")
 
 	if !isSafeComponent(username) || !isSafeComponent(repoName) {
 		http.Error(w, "Invalid repo path", http.StatusBadRequest)

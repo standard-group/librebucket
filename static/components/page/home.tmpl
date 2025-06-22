@@ -1,0 +1,160 @@
+{{define "home.tmpl"}}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Librebucket</title>
+    <link rel="stylesheet" href="/static/components/css/home.css" />
+    <script src="/static/components/js/home.js"></script>
+  </head>
+  <body>
+    <div class="app {{if .IsDarkMode}}dark{{else}}light{{ end }}">
+      <header class="header">
+        <div class="header-content">
+          <div class="logo">
+            <img
+              src="/static/components/img/new-librebucket-logo.svg"
+              alt="Librebucket logo"
+            />
+          </div>
+          <button class="theme-toggle" type="submit">
+            {{if .IsDarkMode}}☀️{{else}}🌙{{ end }}
+          </button>
+        </div>
+      </header>
+      <main class="main">
+        <div class="main-content">
+          <section class="hero-section">
+            <div class="hero-content">
+              <h1 class="main-title">Librebucket</h1>
+              <p class="hero-subtitle">
+                Create the future,
+                <a href="https://example.com" class="hero-link"
+                  >commit after commit</a
+                >
+              </p>
+              <p class="hero-description">
+                Librebucket is a self-hosted lightweight software forge.
+              </p>
+              <p class="hero-description">
+                Easy to install and low maintenance, it just does the job.
+              </p>
+              <p class="instance-notice">
+                You are currently visiting an instance, means that we do not
+                owned it and, we are not responsible for any things which on
+                this forge.
+              </p>
+              <div class="button-group">
+                <button class="btn btn-primary">Join &amp; register</button>
+                <button class="btn btn-secondary" onclick="{goToLogin}">
+                  Sign In
+                </button>
+              </div>
+            </div>
+            <div class="hero-image">
+              <img
+                class="group-4"
+                src="/static/components/img/group-10-1.svg"
+                alt=""
+              />
+              <img
+                class="group-5"
+                src="/static/components/img/group-17-1.svg"
+                alt=""
+              />
+            </div>
+          </section>
+
+          <section class="features-section">
+            <h2 class="section-title">Why Librebucket?</h2>
+            <div class="feature-grid">
+              <div class="feature-item">
+                <img src="/static/components/img/feather.svg" alt="" />
+                <div>
+                  <h3>Lightweight &amp; fast</h3>
+                  <p>
+                    Librebucket is less than 500MB and lightning fast, even
+                    Raspberry Pi can run it!
+                  </p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <img src="/static/components/img/coffee-to-go.svg" alt="" />
+                <div>
+                  <h3>Coffee To Go, easy install &amp; maintain</h3>
+                  <p>
+                    Our "bucket" is packed with tools and stuff already, for
+                    developers, by developers.
+                  </p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <img src="/static/components/img/git.svg" alt="" />
+                <div>
+                  <h3>Self-hosted alternative to GitHub and GitLab</h3>
+                  <p>
+                    GitHub and GitLab are full of telemetry. Librebucket is an
+                    awesome alternative!
+                  </p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <img src="/static/components/img/heart-cog.svg" alt="" />
+                <div>
+                  <h3>100% Free and OSS</h3>
+                  <p>
+                    Standard Group loves open-source. Librebucket will be
+                    forever free and open-source!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="contribute-section">
+            <h2 class="section-title">Get Involved</h2>
+            <p class="contribute-description">
+              Librebucket is made by many motivated people, and we are looking
+              forward to your contribution. Small or big contributions, you are
+              still making big steps for Librebucket.
+            </p>
+            <div class="contribute-buttons">
+              <button class="btn btn-contribute">
+                <img src="/static/components/img/github.svg" alt="" />
+                Contribute on Github
+              </button>
+              <button class="btn btn-donate">
+                <img src="/static/components/img/heart-cog.svg" alt="" />
+                Donate
+              </button>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="footer">
+        <div class="footer-content">
+          <div class="footer-left">
+            <p>Version: {{.AppVersion}}</p>
+            <p>This home page is running on Librebucket</p>
+            <p>
+              Copyright © 2025 Librebucket authors. Content available under CC
+              BY-SA 4.0.
+            </p>
+            <p>Credit to the Forgejo's contributors for design inspiration.</p>
+          </div>
+          <div class="footer-right">
+            <a href="https://example.com">Licenses</a>
+            <a href="https://example.com"
+              ><img src="/static/components/img/api.svg" alt=""
+            /></a>
+            <a href="https://example.com"
+              ><img src="/static/components/img/github.svg" alt=""
+            /></a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+{{ end }}
