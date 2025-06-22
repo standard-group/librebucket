@@ -38,6 +38,8 @@ func init() {
 	log.Println("Successfully parsed all template files.")
 }
 
+// RenderTemplate executes the specified HTML template with the provided data and writes the result to the HTTP response.
+// If template execution fails, it sends an HTTP 500 Internal Server Error with the error message.
 func RenderTemplate(name string, data any, w http.ResponseWriter) {
 	// Ensure the template exists
 	tmpl := templates.Lookup(name)
