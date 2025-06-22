@@ -25,7 +25,7 @@ import (
 	"librebucket/cmd/git"
 )
 
-// StartServer starts the web server for LibreBucket
+// StartServer initializes and runs the LibreBucket web server, setting up API endpoints, static file serving, Git HTTP protocol handlers, and web UI routes. The server listens on the specified port and terminates with a fatal log message if it fails to start.
 func StartServer() {
 	port := flag.Int("port", 3000, "Port to listen on")
 	flag.Parse()
@@ -88,7 +88,9 @@ func isSafeComponent(s string) bool {
 		!strings.Contains(s, "..")
 }
 
-// gitAndWebHandler routes requests for Git HTTP services and general web UI
+// gitAndWebHandler serves the web UI page for a Git repository if it exists and the path is valid.
+// 
+// Validates the username and repository name from the URL, ensures the repository exists, and renders the repository's web interface with relevant information. Responds with HTTP 400 for invalid paths or 404 if the repository is not found.
 func gitAndWebHandler(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
 	repoName := chi.URLParam(r, "repoName")
@@ -117,7 +119,11 @@ func gitAndWebHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// handleGitInfoRefs handles GET/HEAD /username/repo[.git]/info/refs
+// handleGitInfoRefs serves the Git smart HTTP protocol's info/refs endpoint for a repository.
+//
+// Validates the repository path and requested Git service, checks authorization for pull or push actions,
+// and executes the corresponding Git command to advertise refs. Streams the Git protocol response to the client
+// with appropriate headers. Responds with 401 if authentication is required or 404 if the repository does not exist.
 func handleGitInfoRefs(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
 	repoName := chi.URLParam(r, "repoName")
@@ -216,7 +222,9 @@ func handleGitInfoRefs(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handleGitService handles POST /username/repo[.git]/git-upload-pack and git-receive-pack
+// handleGitService processes Git smart HTTP POST requests for upload-pack (pull) and receive-pack (push) services on a repository.
+// 
+// It validates the repository path and service type, checks user authorization for the requested action, and executes the corresponding Git command in stateless RPC mode. The function streams the request body to the Git process (handling gzip compression if present) and relays the Git command's output to the HTTP response with appropriate headers. Responds with relevant HTTP errors for invalid paths, unauthorized access, or internal failures.
 func handleGitService(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
 	repoName := chi.URLParam(r, "repoName")

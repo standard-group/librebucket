@@ -14,6 +14,7 @@ var (
 	once      sync.Once
 )
 
+// LoadTemplates parses all HTML template files in the static/components/page directory and initializes the templates collection once for the application lifetime.
 func LoadTemplates() {
 	once.Do(func() {
 		baseDir, err := os.Getwd()
@@ -29,6 +30,8 @@ func LoadTemplates() {
 	})
 }
 
+// RenderTemplate executes the specified HTML template with the provided data and writes the result to the HTTP response.
+// If template execution fails, it sends an HTTP 500 Internal Server Error with the error message.
 func RenderTemplate(name string, data any, w http.ResponseWriter) {
 	LoadTemplates()
 	err := templates.ExecuteTemplate(w, name, data)
