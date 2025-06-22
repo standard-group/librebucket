@@ -9,6 +9,8 @@ import (
 	"librebucket/cmd/web"
 )
 
+// main initializes the application's data directory and user database, then starts the web server.
+// It terminates execution with a fatal log if any critical setup step fails.
 func main() {
 	wd, err := os.Getwd()
 	if err != nil {
