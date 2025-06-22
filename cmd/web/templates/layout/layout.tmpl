@@ -5,15 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{block "title" .}}Librebucket{{ end }}</title>
-    <link rel="stylesheet" href="/static/components/css/layout.css" />
+    <link rel="stylesheet" href="/static/css/layout.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
-    {{block "head" .
-    }}{{
-      end
-    }}
+    {{block "head" .}}{{end}}
   </head>
   <body class="{{if .IsDarkMode}}dark{{else}}light{{ end }}">
     <div class="app">

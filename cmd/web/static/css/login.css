@@ -301,12 +301,6 @@
   margin-top: 0.5rem;
 }
 
-.register-link {
-  color: var(--primary-blue);
-  text-decoration: none;
-  transition: opacity 0.2s ease;
-}
-
 .signin-footer {
   display: flex;
   flex-direction: column;

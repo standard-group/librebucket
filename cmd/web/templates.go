@@ -21,7 +21,7 @@ func LoadTemplates() {
 			log.Fatalf("Failed to get working directory: %v", err)
 		}
 
-		pattern := filepath.Join(baseDir, "static", "components", "page", "*.tmpl")
+		pattern := filepath.Join(baseDir, "cmd", "web", "templates", "page", "*.tmpl")
 		templates, err = template.ParseGlob(pattern)
 		if err != nil {
 			log.Fatalf("Failed to parse templates: %v", err)
