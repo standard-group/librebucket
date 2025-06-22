@@ -1,0 +1,90 @@
+{{define "login.tmpl"}}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Librebucket</title>
+    <link rel="stylesheet" href="/static/css/login.css" />
+    <script src="/static/js/login.js"></script>
+  </head>
+  <body class="{{if .IsDarkMode}}dark{{else}}light{{ end }}">
+    <div class="app">
+      <header class="header">
+        <div class="header-content">
+          <div class="logo">
+            <img
+              src="/static/components/img/new-librebucket-logo.svg"
+              alt="Librebucket logo"
+            />
+          </div>
+          <button class="theme-toggle" type="button">
+            {{if .IsDarkMode}}☀️{{else}}🌙{{ end }}
+          </button>
+        </div>
+      </header>
+      <main class="main">
+        <div class="login-container">
+          <div class="login-card">
+            <div class="login-header">
+              <img
+                src="/static/components/img/new-librebucket-logo.svg"
+                alt="Librebucket logo"
+                class="login-logo"
+              />
+              <h1 class="login-title">Librebucket</h1>
+            </div>
+            <form class="login-form" method="get" action="/login">
+              <div class="form-group">
+                <label for="username" class="form-label"
+                  >Username or email</label
+                >
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  class="form-input"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <div class="password-container">
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-input"
+                    required
+                  />
+                  <button
+                    type="button"
+                    id="toggle-password"
+                    class="password-toggle"
+                  >
+                    <img
+                      src="/static/components/img/eye.svg"
+                      alt="Show password"
+                      id="eye-icon"
+                    />
+                  </button>
+                </div>
+                <a href="#" class="forgot-password">Forgot your password?</a>
+              </div>
+              <button type="submit" class="btn btn-primary btn-signin">
+                Sign in
+              </button>
+              <div class="signin-footer">
+                <p class="register-text">
+                  Don't have an account?
+                  <a href="/register" class="register-link">Register now</a>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+{{ end }}

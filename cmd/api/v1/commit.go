@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"librebucket/internal/git"
+	"librebucket/cmd/git"
 )
 
 // CommitHandler handles commit-related API endpoints

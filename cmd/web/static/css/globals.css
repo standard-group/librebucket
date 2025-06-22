@@ -1,5 +1,5 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 
 * {
   -webkit-font-smoothing: antialiased;
@@ -10,7 +10,7 @@ html,
 body {
   margin: 0px;
   height: 100%;
-  background-color: #171E26;
+  background-color: #171e26;
 }
 
 /* a blue color as a generic focus style */
@@ -43,7 +43,6 @@ body {
 }
 
 @media (max-width: 900px) {
-
   html,
   body {
     width: 100vw;
@@ -62,7 +61,6 @@ body {
 }
 
 @media (max-width: 600px) {
-
   .main-content-wrapper,
   .overlap,
   .overlap-6 {
@@ -103,7 +101,6 @@ body {
 }
 
 @media (max-width: 600px) {
-
   html,
   body,
   .TV,
