@@ -7,6 +7,8 @@
 </h1>
 <h4 align="center">
    A lightweight, self-hosted Git server with a clean web interface, built with Go.
+
+   <b>Still work in progress forge!</b>
 </h4>
 <p align="center">
    <a href="https://goreportcard.com/report/github.com/standard-group/librebucket">

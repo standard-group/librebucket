@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"librebucket/internal/db"
-	"librebucket/internal/git"
+	"librebucket/cmd/db"
+	"librebucket/cmd/git"
 )
 
 // APICreateRepoHandler handles POST /api/v1/git/create

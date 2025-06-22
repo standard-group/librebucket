@@ -1,23 +1,36 @@
 package main
 
 import (
-	"librebucket/internal/db"
-	"librebucket/web"
 	"log"
 	"os"
+	"path/filepath"
+
+	"librebucket/cmd/db"
+	"librebucket/cmd/web"
 )
 
 func main() {
-	if err := db.InitDB("users.db"); err != nil {
+	wd, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Failed to get working directory: %v", err)
+	}
+
+	// ./config/data
+	dataDir := filepath.Join(wd, "config", "data")
+
+	if err := os.MkdirAll(dataDir, 0755); err != nil {
+		log.Fatalf("Failed to create data directory: %v", err)
+	}
+
+	dbPath := filepath.Join(dataDir, "users.db")
+
+	if err := db.InitDB(dbPath); err != nil {
 		log.Fatalf("Failed to initialize user DB: %v", err)
 		return
 	}
 
-	dir, err := os.Getwd()
-	if err != nil {
-		log.Println(err)
-	}
-	log.Println(dir)
+	log.Println("Working dir:", wd)
+	log.Println("DB initialized at:", dbPath)
 
 	web.StartServer()
 }

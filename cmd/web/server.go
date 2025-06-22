@@ -20,9 +20,9 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
-	api "librebucket/internal/api/v1"
-	"librebucket/internal/db"
-	"librebucket/internal/git"
+	api "librebucket/cmd/api/v1"
+	"librebucket/cmd/db"
+	"librebucket/cmd/git"
 )
 
 // StartServer starts the web server for LibreBucket

@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strings"
 
-	"librebucket/internal/db"
+	"librebucket/cmd/db"
 )
 
 // UserRegisterHandler handles POST /api/v1/users/register
