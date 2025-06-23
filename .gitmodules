@@ -1,0 +1,3 @@
+[submodule "cmd/web/i18n"]
+	path = cmd/web/i18n
+	url = https://github.com/standard-group/librebucket-translations.git
