@@ -21,8 +21,15 @@ GOARM = {
 }
 
 CFG = configparser.ConfigParser()
-CFG.read("build.config.ini")
-GPG_KEY_ID = CFG["gpg"]["key_id"] 
+CFG = configparser.ConfigParser()
+if not CFG.read("build.config.ini"):
+    log("error", "Failed to read build.config.ini")
+    sys.exit(1)
+try:
+    GPG_KEY_ID = CFG["gpg"]["key_id"]
+except KeyError:
+    log("warn", "GPG key_id not found in config, signing will be skipped")
+    GPG_KEY_ID = None
 
 # ---- Logging ----
 def log(level, msg):
