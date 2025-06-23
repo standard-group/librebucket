@@ -30,8 +30,21 @@ def log(level, msg):
     print(f"[{ts}] [{level.upper():5}] {msg}")
 
 def run_cmd(cmd, cwd=None):
-    subprocess.run(cmd, check=True, cwd=cwd)
-
+def run_cmd(cmd, cwd=None):
+    try:
+        result = subprocess.run(
+            cmd,
+            check=True,
+            cwd=cwd,
+            capture_output=True,
+            text=True
+        )
+        return result
+    except subprocess.CalledProcessError as e:
+        log("error", f"Command failed: {' '.join(cmd)}")
+        if e.stderr:
+            log("error", f"stderr: {e.stderr}")
+        raise
 def sha256sum(filepath):
     sha256 = hashlib.sha256()
     with open(filepath, "rb") as f:
