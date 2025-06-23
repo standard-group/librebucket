@@ -1,26 +1,40 @@
 {{define "login.tmpl"}}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{.Lang}}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Librebucket</title>
-    <link rel="stylesheet" href="/static/css/login.css" />
+    <title>{{.Trans.title}}</title>
+    <link rel="stylesheet" href="/static/css/for_home_login.css" />
     <script src="/static/js/login.js"></script>
   </head>
-  <body class="{{if .IsDarkMode}}dark{{else}}light{{ end }}">
+  <body class="{{if .IsDarkMode}}dark{{else}}light{{end}}">
     <div class="app">
       <header class="header">
         <div class="header-content">
           <div class="logo">
             <img
-              src="/static/components/img/new-librebucket-logo.svg"
+              src="/static/img/new-librebucket-logo.svg"
               alt="Librebucket logo"
             />
           </div>
-          <button class="theme-toggle" type="button">
-            {{if .IsDarkMode}}☀️{{else}}🌙{{ end }}
-          </button>
+          <div class="header-controls">
+            <form id="lang-form" method="post" action="/set-lang" class="lang-form">
+              <select name="lang" onchange="document.getElementById('lang-form').submit()" class="lang-select">
+                <option value="en" {{if eq .Lang "en"}}selected{{end}}>English</option>
+                <option value="es" {{if eq .Lang "es"}}selected{{end}}>Español</option>
+                <option value="fr" {{if eq .Lang "fr"}}selected{{end}}>Français</option>
+                <option value="hu" {{if eq .Lang "hu"}}selected{{end}}>Magyar</option>
+                <option value="lt" {{if eq .Lang "lt"}}selected{{end}}>Lietuvių</option>
+                <option value="pl" {{if eq .Lang "pl"}}selected{{end}}>Polski</option>
+                <option value="ru" {{if eq .Lang "ru"}}selected{{end}}>Русский</option>
+                <option value="ua" {{if eq .Lang "ua"}}selected{{end}}>Українська</option>
+              </select>
+            </form>
+            <button class="theme-toggle" type="button">
+              {{if .IsDarkMode}}☀️{{else}}🌙{{ end }}
+            </button>
+          </div>
         </div>
       </header>
       <main class="main">
@@ -28,7 +42,7 @@
           <div class="login-card">
             <div class="login-header">
               <img
-                src="/static/components/img/new-librebucket-logo.svg"
+                src="/static/img/new-librebucket-logo.svg"
                 alt="Librebucket logo"
                 class="login-logo"
               />
@@ -36,9 +50,9 @@
             </div>
             <form class="login-form" method="get" action="/login">
               <div class="form-group">
-                <label for="username" class="form-label"
-                  >Username or email</label
-                >
+                <label for="username" class="form-label">
+                  {{.Trans.form.username_or_email}}
+                </label>
                 <input
                   type="text"
                   id="username"
@@ -48,7 +62,7 @@
                 />
               </div>
               <div class="form-group">
-                <label for="password" class="form-label">Password</label>
+                <label for="password" class="form-label">{{.Trans.form.password}}</label>
                 <div class="password-container">
                   <input
                     type="password"
@@ -63,21 +77,21 @@
                     class="password-toggle"
                   >
                     <img
-                      src="/static/components/img/eye.svg"
+                      src="/static/img/eye.svg"
                       alt="Show password"
                       id="eye-icon"
                     />
                   </button>
                 </div>
-                <a href="#" class="forgot-password">Forgot your password?</a>
+                <a href="#" class="forgot-password">{{.Trans.text.forgot_password}}</a>
               </div>
               <button type="submit" class="btn btn-primary btn-signin">
-                Sign in
+                {{.Trans.buttons.sign_in}}
               </button>
               <div class="signin-footer">
                 <p class="register-text">
-                  Don't have an account?
-                  <a href="/register" class="register-link">Register now</a>
+                  {{.Trans.text.no_account}}
+                  <a href="/register" class="register-link">{{.Trans.buttons.register}}</a>
                 </p>
               </div>
             </form>
@@ -87,4 +101,4 @@
     </div>
   </body>
 </html>
-{{ end }}
+{{end}}

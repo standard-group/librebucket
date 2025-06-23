@@ -1,41 +1,42 @@
 package web
 
 import (
+	"embed"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
-	"os"
-	"path/filepath"
-	"sync"
 )
 
-var (
-	templates *template.Template
-	once      sync.Once
-)
+//go:embed templates/page/*.tmpl templates/layout/*.tmpl
+var templateFS embed.FS
 
-// LoadTemplates parses all HTML template files in the static/components/page directory and initializes the templates collection once for the application lifetime.
-func LoadTemplates() {
-	once.Do(func() {
-		baseDir, err := os.Getwd()
-		if err != nil {
-			log.Fatalf("Failed to get working directory: %v", err)
-		}
+var templates *template.Template
 
-		pattern := filepath.Join(baseDir, "cmd", "web", "templates", "page", "*.tmpl")
-		templates, err = template.ParseGlob(pattern)
-		if err != nil {
-			log.Fatalf("Failed to parse templates: %v", err)
-		}
-	})
+func init() {
+	var err error
+	templates, err = template.ParseFS(templateFS, "templates/page/*.tmpl", "templates/layout/*.tmpl")
+	if err != nil {
+		log.Fatalf("Failed to parse embedded templates: %v", err)
+	}
+	log.Println("Successfully parsed all embedded template files.")
 }
 
 // RenderTemplate executes the specified HTML template with the provided data and writes the result to the HTTP response.
 // If template execution fails, it sends an HTTP 500 Internal Server Error with the error message.
 func RenderTemplate(name string, data any, w http.ResponseWriter) {
-	LoadTemplates()
-	err := templates.ExecuteTemplate(w, name, data)
+	// Ensure the template exists
+	tmpl := templates.Lookup(name)
+	if tmpl == nil {
+		http.Error(w, fmt.Sprintf("The template %s does not exist.", name), http.StatusInternalServerError)
+		log.Printf("Template not found: %s", name)
+		return
+	}
+
+	// Execute the template with the provided data
+	err := tmpl.Execute(w, data)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Failed to render template", http.StatusInternalServerError)
+		log.Printf("Error executing template %s: %v", name, err)
 	}
 }
