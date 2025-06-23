@@ -458,7 +458,15 @@ func isValidLangCode(lang string) bool {
 
 // isValidPageName validates page name contains only alphanumeric characters
 func isValidPageName(page string) bool {
-	return page != "" && strings.Contains(page, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-")
+	if page == "" {
+		return false
+	}
+	for _, r := range page {
+		if !((r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') || r == '_' || r == '-') {
+			return false
+		}
+	}
+	return true
 }
 
 // homeHandler serves the home page with translations
@@ -499,7 +507,7 @@ func setLangHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	lang := r.FormValue("lang")
-	if len(lang) != 2 || !strings.Contains(lang, "abcdefghijklmnopqrstuvwxyz") {
+	if !isValidLangCode(lang) {
 		http.Error(w, "Invalid language code", http.StatusBadRequest)
 		return
 	}
