@@ -26,6 +26,16 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// isAlpha checks if a string contains only alphabetic characters
+func isAlpha(s string) bool {
+	for _, r := range s {
+		if r < 'A' || (r > 'Z' && r < 'a') || r > 'z' {
+			return false
+		}
+	}
+	return true
+}
+
 // StartServer initializes and runs the LibreBucket web server, setting up API endpoints, static file serving, Git HTTP protocol handlers, and web UI routes. The server listens on the specified port and terminates with a fatal log message if it fails to start.
 func StartServer() {
 	port := flag.Int("port", 3000, "Port to listen on")
@@ -412,8 +422,12 @@ func checkRepoAuth(r *http.Request, repoPath, action, expectedOwner string) bool
 // getLang gets language from cookie, defaults to "en"
 func getLang(r *http.Request) string {
 	cookie, err := r.Cookie("lang")
-	if err == nil && len(cookie.Value) == 2 {
-		return cookie.Value
+	if err == nil {
+		lang := cookie.Value
+		// Validate that lang is a two-character alphabetic string
+		if len(lang) == 2 && isAlpha(lang) {
+			return lang
+		}
 	}
 	return "en"
 }
