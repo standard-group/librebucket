@@ -434,6 +434,10 @@ func getLang(r *http.Request) string {
 
 // loadTranslations loads translations from a YAML file for a given page and language
 func loadTranslations(lang, page string) (map[string]any, error) {
+	// Validate lang and page inputs to prevent path traversal
+	if !isValidLangCode(lang) || !isValidPageName(page) {
+		return nil, fmt.Errorf("invalid lang or page parameter")
+	}
 	path := fmt.Sprintf("cmd/web/i18n/langs/%s/%s.yaml", lang, page)
 	f, err := os.Open(path)
 	if err != nil {
@@ -445,6 +449,16 @@ func loadTranslations(lang, page string) (map[string]any, error) {
 		return nil, err
 	}
 	return m, nil
+}
+
+// isValidLangCode validates language code format (e.g., "en", "fr", "de")
+func isValidLangCode(lang string) bool {
+	return len(lang) == 2 && strings.Contains(lang, "abcdefghijklmnopqrstuvwxyz")
+}
+
+// isValidPageName validates page name contains only alphanumeric characters
+func isValidPageName(page string) bool {
+	return page != "" && strings.Contains(page, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-")
 }
 
 // homeHandler serves the home page with translations
@@ -480,16 +494,22 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 // setLangHandler sets the language cookie
 func setLangHandler(w http.ResponseWriter, r *http.Request) {
-	if err := r.ParseForm(); err == nil {
-		lang := r.FormValue("lang")
-		http.SetCookie(w, &http.Cookie{
-			Name:   "lang",
-			Value:  lang,
-			Path:   "/",
-			MaxAge: 86400 * 365, // 1 year
-		})
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Invalid form data", http.StatusBadRequest)
+		return
 	}
-	// Redirect back to the previous page
+	lang := r.FormValue("lang")
+	if len(lang) != 2 || !strings.Contains(lang, "abcdefghijklmnopqrstuvwxyz") {
+		http.Error(w, "Invalid language code", http.StatusBadRequest)
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:   "lang",
+		Value:  lang,
+		Path:   "/",
+		MaxAge: 86400 * 365,
+	})
 	http.Redirect(w, r, r.Referer(), http.StatusSeeOther)
 }
 

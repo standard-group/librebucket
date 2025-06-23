@@ -1,41 +1,25 @@
 package web
 
 import (
+	"embed"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
-	"path/filepath"
 )
+
+//go:embed templates/page/*.tmpl templates/layout/*.tmpl
+var templateFS embed.FS
 
 var templates *template.Template
 
 func init() {
-	// Initialize templates map
-	templates = template.New("")
-	templateFiles, err := filepath.Glob("cmd/web/templates/page/*.tmpl")
+	var err error
+	templates, err = template.ParseFS(templateFS, "templates/page/*.tmpl", "templates/layout/*.tmpl")
 	if err != nil {
-		log.Fatalf("Failed to find template files: %v", err)
+		log.Fatalf("Failed to parse embedded templates: %v", err)
 	}
-
-	layoutFiles, err := filepath.Glob("cmd/web/templates/layout/*.tmpl")
-	if err != nil {
-		log.Fatalf("Failed to find layout files: %v", err)
-	}
-
-	allFiles := append(templateFiles, layoutFiles...)
-
-	if len(allFiles) == 0 {
-		log.Println("No template files found.")
-		return
-	}
-
-	// Parse all template files
-	templates, err = template.ParseFiles(allFiles...)
-	if err != nil {
-		log.Fatalf("Failed to parse templates: %v", err)
-	}
-	log.Println("Successfully parsed all template files.")
+	log.Println("Successfully parsed all embedded template files.")
 }
 
 // RenderTemplate executes the specified HTML template with the provided data and writes the result to the HTTP response.

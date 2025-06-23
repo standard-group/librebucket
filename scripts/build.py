@@ -1,9 +1,9 @@
 import os
 import subprocess
 import hashlib
-import tarfile
 import configparser
 import lzma
+import sys
 from datetime import datetime
 
 # ---- Config ----
@@ -12,16 +12,22 @@ OUTPUT_BASE = os.path.join(os.getcwd(), "build")
 TARGETS = [
     ("windows", "amd64"),
     ("windows", "arm64"),
-    ("linux",   "amd64"),
-    ("linux",   "arm64"),
-    ("linux",   "arm"),  # armv6 is supported by GOARM=6
+    ("linux", "amd64"),
+    ("linux", "arm64"),
+    ("linux", "arm"),  # armv6 is supported by GOARM=6
 ]
-GOARM = {
-    "arm": "6"  # target armv6 for SBCs
-}
+GOARM = {"arm": "6"}  # target armv6 for SBCs
 
 CFG = configparser.ConfigParser()
 CFG = configparser.ConfigParser()
+
+
+# ---- Logging ----
+def log(level, msg):
+    ts = datetime.now().isoformat(timespec="seconds")
+    print(f"[{ts}] [{level.upper():5}] {msg}")
+
+
 if not CFG.read("build.config.ini"):
     log("error", "Failed to read build.config.ini")
     sys.exit(1)
@@ -31,20 +37,11 @@ except KeyError:
     log("warn", "GPG key_id not found in config, signing will be skipped")
     GPG_KEY_ID = None
 
-# ---- Logging ----
-def log(level, msg):
-    ts = datetime.now().isoformat(timespec="seconds")
-    print(f"[{ts}] [{level.upper():5}] {msg}")
 
-def run_cmd(cmd, cwd=None):
 def run_cmd(cmd, cwd=None):
     try:
         result = subprocess.run(
-            cmd,
-            check=True,
-            cwd=cwd,
-            capture_output=True,
-            text=True
+            cmd, check=True, cwd=cwd, capture_output=True, text=True
         )
         return result
     except subprocess.CalledProcessError as e:
@@ -52,12 +49,15 @@ def run_cmd(cmd, cwd=None):
         if e.stderr:
             log("error", f"stderr: {e.stderr}")
         raise
+
+
 def sha256sum(filepath):
     sha256 = hashlib.sha256()
     with open(filepath, "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
             sha256.update(chunk)
     return sha256.hexdigest()
+
 
 # ---- Build ----
 def build(goos, goarch):
@@ -119,6 +119,7 @@ def compress_and_sign(binary_path, out_dir):
         log("info", f"Signed → {asc_path}")
     except subprocess.CalledProcessError:
         log("warn", "GPG sign failed")
+
 
 # ---- Main ----
 if __name__ == "__main__":
