@@ -89,7 +89,7 @@ func isSafeComponent(s string) bool {
 }
 
 // gitAndWebHandler serves the web UI page for a Git repository if it exists and the path is valid.
-// 
+//
 // Validates the username and repository name from the URL, ensures the repository exists, and renders the repository's web interface with relevant information. Responds with HTTP 400 for invalid paths or 404 if the repository is not found.
 func gitAndWebHandler(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
@@ -223,7 +223,7 @@ func handleGitInfoRefs(w http.ResponseWriter, r *http.Request) {
 }
 
 // handleGitService processes Git smart HTTP POST requests for upload-pack (pull) and receive-pack (push) services on a repository.
-// 
+//
 // It validates the repository path and service type, checks user authorization for the requested action, and executes the corresponding Git command in stateless RPC mode. The function streams the request body to the Git process (handling gzip compression if present) and relays the Git command's output to the HTTP response with appropriate headers. Responds with relevant HTTP errors for invalid paths, unauthorized access, or internal failures.
 func handleGitService(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
