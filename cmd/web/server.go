@@ -23,6 +23,8 @@ import (
 	"librebucket/cmd/db"
 	"librebucket/cmd/git"
 
+	"io/fs"
+
 	"gopkg.in/yaml.v3"
 )
 
@@ -58,8 +60,8 @@ func StartServer() {
 	r.Mount("/api/v1/repos", commitMux)
 
 	// Serve static files from the cmd/web/static directory
-	fs := http.FileServer(http.Dir("cmd/web/static"))
-	r.Handle("/static/*", http.StripPrefix("/static/", fs))
+	staticSub, _ := fs.Sub(staticFS, "static")
+	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.FS(staticSub))))
 
 	// Page handlers
 	r.Get("/", homeHandler)
@@ -438,8 +440,8 @@ func loadTranslations(lang, page string) (map[string]any, error) {
 	if !isValidLangCode(lang) || !isValidPageName(page) {
 		return nil, fmt.Errorf("invalid lang or page parameter")
 	}
-	path := fmt.Sprintf("cmd/web/i18n/langs/%s/%s.yaml", lang, page)
-	f, err := os.Open(path)
+	path := fmt.Sprintf("i18n/langs/%s/%s.yaml", lang, page)
+	f, err := I18nFS.Open(path)
 	if err != nil {
 		return nil, err
 	}
@@ -453,7 +455,15 @@ func loadTranslations(lang, page string) (map[string]any, error) {
 
 // isValidLangCode validates language code format (e.g., "en", "fr", "de")
 func isValidLangCode(lang string) bool {
-	return len(lang) == 2 && strings.Contains(lang, "abcdefghijklmnopqrstuvwxyz")
+	if len(lang) != 2 {
+		return false
+	}
+	for _, r := range lang {
+		if (r < 'a' || r > 'z') && (r < 'A' || r > 'Z') {
+			return false
+		}
+	}
+	return true
 }
 
 // isValidPageName validates page name contains only alphanumeric characters

@@ -9,15 +9,21 @@ import (
 )
 
 //go:embed templates/page/*.tmpl templates/layout/*.tmpl
-var templateFS embed.FS
+var tmplFS embed.FS
+
+//go:embed static/**/*
+var staticFS embed.FS
+
+//go:embed i18n/langs/**/*.yaml
+var I18nFS embed.FS
 
 var templates *template.Template
 
 func init() {
 	var err error
-	templates, err = template.ParseFS(templateFS, "templates/page/*.tmpl", "templates/layout/*.tmpl")
+	templates, err = template.ParseFS(tmplFS, "templates/page/*.tmpl", "templates/layout/*.tmpl")
 	if err != nil {
-		log.Fatalf("Failed to parse embedded templates: %v", err)
+		log.Fatalf("Failed to parse templates: %v", err)
 	}
 	log.Println("Successfully parsed all embedded template files.")
 }
