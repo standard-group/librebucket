@@ -16,14 +16,25 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/HazelnutParadise/sveltigo"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
 	api "librebucket/cmd/api/v1"
 	"librebucket/cmd/db"
 	"librebucket/cmd/git"
+
+	"gopkg.in/yaml.v3"
 )
+
+// isAlpha checks if a string contains only alphabetic characters
+func isAlpha(s string) bool {
+	for _, r := range s {
+		if r < 'A' || (r > 'Z' && r < 'a') || r > 'z' {
+			return false
+		}
+	}
+	return true
+}
 
 // StartServer initializes and runs the LibreBucket web server, setting up API endpoints, static file serving, Git HTTP protocol handlers, and web UI routes. The server listens on the specified port and terminates with a fatal log message if it fails to start.
 func StartServer() {
@@ -46,19 +57,14 @@ func StartServer() {
 	api.CommitHandler(commitMux)
 	r.Mount("/api/v1/repos", commitMux)
 
-	// Serve static files
-	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	r.Handle("/css/*", http.StripPrefix("/css/", http.FileServer(http.Dir("static/components/css"))))
-	r.Handle("/js/*", http.StripPrefix("/js/", http.FileServer(http.Dir("static/components/js"))))
-	r.Handle("/img/*", http.StripPrefix("/img/", http.FileServer(http.Dir("static/components/img"))))
+	// Serve static files from the cmd/web/static directory
+	fs := http.FileServer(http.Dir("cmd/web/static"))
+	r.Handle("/static/*", http.StripPrefix("/static/", fs))
 
-	// Generic handler for root, repo pages, and Git HTTP services
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		RenderTemplate("home.tmpl", nil, w)
-	})
-	r.Get("/login", func(w http.ResponseWriter, r *http.Request) {
-		RenderTemplate("login.tmpl", nil, w)
-	})
+	// Page handlers
+	r.Get("/", homeHandler)
+	r.Post("/set-lang", setLangHandler)
+	r.Get("/login", loginHandler)
 
 	// Git HTTP services
 	r.Get("/{username}/{repoName}.git/info/refs", handleGitInfoRefs)
@@ -111,12 +117,15 @@ func gitAndWebHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Serve dynamic web UI for a repository using golte.RenderPage
-	sveltigo.RenderPage(w, r, "components/page/repo", map[string]any{
+	// Data to pass to the template
+	data := map[string]any{
 		"username": username,
 		"repoName": repoName,
 		"cloneUrl": fmt.Sprintf("http://%s/%s/%s.git", r.Host, username, repoName),
-	})
+	}
+
+	// Render the Go HTML template
+	RenderTemplate("repo.tmpl", data, w)
 }
 
 // handleGitInfoRefs serves the Git smart HTTP protocol's info/refs endpoint for a repository.
@@ -408,6 +417,108 @@ func checkRepoAuth(r *http.Request, repoPath, action, expectedOwner string) bool
 
 	// For push (git-receive-pack) and other write actions: only owner can push
 	return isOwnerAuthenticated(r, meta)
+}
+
+// getLang gets language from cookie, defaults to "en"
+func getLang(r *http.Request) string {
+	cookie, err := r.Cookie("lang")
+	if err == nil {
+		lang := cookie.Value
+		// Validate that lang is a two-character alphabetic string
+		if len(lang) == 2 && isAlpha(lang) {
+			return lang
+		}
+	}
+	return "en"
+}
+
+// loadTranslations loads translations from a YAML file for a given page and language
+func loadTranslations(lang, page string) (map[string]any, error) {
+	// Validate lang and page inputs to prevent path traversal
+	if !isValidLangCode(lang) || !isValidPageName(page) {
+		return nil, fmt.Errorf("invalid lang or page parameter")
+	}
+	path := fmt.Sprintf("cmd/web/i18n/langs/%s/%s.yaml", lang, page)
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	var m map[string]any
+	if err := yaml.NewDecoder(f).Decode(&m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// isValidLangCode validates language code format (e.g., "en", "fr", "de")
+func isValidLangCode(lang string) bool {
+	return len(lang) == 2 && strings.Contains(lang, "abcdefghijklmnopqrstuvwxyz")
+}
+
+// isValidPageName validates page name contains only alphanumeric characters
+func isValidPageName(page string) bool {
+	if page == "" {
+		return false
+	}
+	for _, r := range page {
+		if !((r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') || r == '_' || r == '-') {
+			return false
+		}
+	}
+	return true
+}
+
+// homeHandler serves the home page with translations
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	lang := getLang(r)
+	trans, err := loadTranslations(lang, "home")
+	if err != nil {
+		// Fallback to English if the language file is missing or fails to parse
+		log.Printf("Could not load translations for lang '%s': %v. Falling back to 'en'.", lang, err)
+		trans, _ = loadTranslations("en", "home")
+	}
+
+	data := map[string]any{
+		"Trans": trans,
+		"Lang":  lang,
+	}
+	RenderTemplate("home.tmpl", data, w)
+}
+
+// loginHandler serves the login page with translations
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	lang := getLang(r)
+	trans, err := loadTranslations(lang, "login")
+	if err != nil {
+		log.Printf("Could not load translations for lang '%s': %v. Falling back to 'en'.", lang, err)
+		trans, _ = loadTranslations("en", "login") // fallback
+	}
+	RenderTemplate("login.tmpl", map[string]any{
+		"Trans": trans,
+		"Lang":  lang,
+	}, w)
+}
+
+// setLangHandler sets the language cookie
+func setLangHandler(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Invalid form data", http.StatusBadRequest)
+		return
+	}
+	lang := r.FormValue("lang")
+	if !isValidLangCode(lang) {
+		http.Error(w, "Invalid language code", http.StatusBadRequest)
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:   "lang",
+		Value:  lang,
+		Path:   "/",
+		MaxAge: 86400 * 365,
+	})
+	http.Redirect(w, r, r.Referer(), http.StatusSeeOther)
 }
 
 // GenerateToken creates a 32-character alphanumeric token

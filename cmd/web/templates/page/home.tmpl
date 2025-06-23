@@ -1,5 +1,20 @@
 {{define "home.tmpl"}}
 <!DOCTYPE html>
+<<<<<<< HEAD
+<html lang="{{.Lang}}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{.Trans.title}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/home.css" />
+    <script src="/static/js/home.js"></script>
+  </head>
+  <body class="{{if .IsDarkMode}}dark{{else}}light{{end}}">
+    <div class="app">
+=======
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -10,10 +25,34 @@
   </head>
   <body>
     <div class="app {{if .IsDarkMode}}dark{{else}}light{{ end }}">
+>>>>>>> main
       <header class="header">
         <div class="header-content">
           <div class="logo">
             <img
+<<<<<<< HEAD
+              src="/static/img/new-librebucket-logo.svg"
+              alt="Librebucket logo"
+            />
+          </div>
+          <div class="header-controls">
+            <form id="lang-form" method="post" action="/set-lang" class="lang-form">
+              <select name="lang" onchange="document.getElementById('lang-form').submit()" class="lang-select">
+                <option value="en" {{if eq .Lang "en"}}selected{{end}}>English</option>
+                <option value="es" {{if eq .Lang "es"}}selected{{end}}>Español</option>
+                <option value="fr" {{if eq .Lang "fr"}}selected{{end}}>Français</option>
+                <option value="hu" {{if eq .Lang "hu"}}selected{{end}}>Magyar</option>
+                <option value="lt" {{if eq .Lang "lt"}}selected{{end}}>Lietuvių</option>
+                <option value="pl" {{if eq .Lang "pl"}}selected{{end}}>Polski</option>
+                <option value="ru" {{if eq .Lang "ru"}}selected{{end}}>Русский</option>
+                <option value="ua" {{if eq .Lang "ua"}}selected{{end}}>Українська</option>
+              </select>
+            </form>
+            <button class="theme-toggle" type="button">
+              {{if .IsDarkMode}}☀️{{else}}🌙{{ end }}
+            </button>
+          </div>
+=======
               src="/static/components/img/new-librebucket-logo.svg"
               alt="Librebucket logo"
             />
@@ -21,12 +60,33 @@
           <button class="theme-toggle" type="button">
             {{if .IsDarkMode}}☀️{{else}}🌙{{ end }}
           </button>
+>>>>>>> main
         </div>
       </header>
       <main class="main">
         <div class="main-content">
           <section class="hero-section">
             <div class="hero-content">
+<<<<<<< HEAD
+              <h1 class="main-title">{{.Trans.title}}</h1>
+              <p class="hero-subtitle">
+                {{ index .Trans.tagline 0 }}
+                <a href="https://example.com" class="hero-link">{{ index .Trans.tagline 1 }}</a>
+              </p>
+              <p class="hero-description">
+                {{.Trans.intro.line1}}
+              </p>
+              <p class="hero-description">
+                {{.Trans.intro.line2}}
+              </p>
+              <p class="instance-notice">
+                {{ index .Trans.third_party_notice 0 }}
+                {{ index .Trans.third_party_notice 1 }}
+              </p>
+              <div class="button-group">
+                <a href="/register" class="btn btn-primary">{{.Trans.buttons.join_register}}</a>
+                <a href="/login" class="btn btn-secondary">{{.Trans.buttons.sign_in}}</a>
+=======
               <h1 class="main-title">Librebucket</h1>
               <p class="hero-subtitle">
                 Create the future,
@@ -49,23 +109,43 @@
                 <button class="btn btn-secondary" onclick="goToLogin()">
                   Sign In
                 </button>
+>>>>>>> main
               </div>
             </div>
             <div class="hero-image">
               <img
                 class="group-4"
+<<<<<<< HEAD
+                src="/static/img/group-10-1.svg"
+=======
                 src="/static/components/img/group-10-1.svg"
+>>>>>>> main
                 alt=""
               />
               <img
                 class="group-5"
+<<<<<<< HEAD
+                src="/static/img/group-17-1.svg"
+=======
                 src="/static/components/img/group-17-1.svg"
+>>>>>>> main
                 alt=""
               />
             </div>
           </section>
 
           <section class="features-section">
+<<<<<<< HEAD
+            <h2 class="section-title">{{.Trans.why.headline}}</h2>
+            <div class="feature-grid">
+              <div class="feature-item">
+                <img src="/static/img/feather.svg" alt="" />
+                <div>
+                  <h3>{{.Trans.why.subtitle}}</h3>
+                  <p>
+                    {{ index .Trans.features.size_speed 0 }}
+                    {{ index .Trans.features.size_speed 1 }}
+=======
             <h2 class="section-title">Why Librebucket?</h2>
             <div class="feature-grid">
               <div class="feature-item">
@@ -75,36 +155,64 @@
                   <p>
                     Librebucket is less than 500MB and lightning fast, even
                     Raspberry Pi can run it!
+>>>>>>> main
                   </p>
                 </div>
               </div>
               <div class="feature-item">
+<<<<<<< HEAD
+                <img src="/static/img/coffee-to-go.svg" alt="" />
+                <div>
+                  <h3>{{.Trans.features.coffee}}</h3>
+                  <p>
+                    {{ index .Trans.features.tools 0 }}
+                    {{ index .Trans.features.tools 1 }}
+=======
                 <img src="/static/components/img/coffee-to-go.svg" alt="" />
                 <div>
                   <h3>Coffee To Go, easy install &amp; maintain</h3>
                   <p>
                     Our "bucket" is packed with tools and stuff already, for
                     developers, by developers.
+>>>>>>> main
                   </p>
                 </div>
               </div>
               <div class="feature-item">
+<<<<<<< HEAD
+                <img src="/static/img/git.svg" alt="" />
+                <div>
+                  <h3>{{ index .Trans.features.self_hosted 0 }}</h3>
+                  <p>
+                    {{ index .Trans.features.telemetry 0 }}
+                    {{ index .Trans.features.telemetry 1 }}
+=======
                 <img src="/static/components/img/git.svg" alt="" />
                 <div>
                   <h3>Self-hosted alternative to GitHub and GitLab</h3>
                   <p>
                     GitHub and GitLab are full of telemetry. Librebucket is an
                     awesome alternative!
+>>>>>>> main
                   </p>
                 </div>
               </div>
               <div class="feature-item">
+<<<<<<< HEAD
+                <img src="/static/img/heart-cog.svg" alt="" />
+                <div>
+                  <h3>{{ index .Trans.features.open_source 0 }}</h3>
+                  <p>
+                    {{ index .Trans.features.open_source 1 }}
+                    {{ index .Trans.features.open_source 2 }}
+=======
                 <img src="/static/components/img/heart-cog.svg" alt="" />
                 <div>
                   <h3>100% Free and OSS</h3>
                   <p>
                     Standard Group loves open-source. Librebucket will be
                     forever free and open-source!
+>>>>>>> main
                   </p>
                 </div>
               </div>
@@ -112,6 +220,22 @@
           </section>
 
           <section class="contribute-section">
+<<<<<<< HEAD
+            <h2 class="section-title">{{.Trans.get_involved.title}}</h2>
+            <p class="contribute-description">
+              {{ index .Trans.get_involved.text 0 }}
+              {{ index .Trans.get_involved.text 1 }}
+              {{ index .Trans.get_involved.text 2 }}
+            </p>
+            <div class="contribute-buttons">
+              <button class="btn btn-contribute">
+                <img src="/static/img/github.svg" alt="" />
+                {{.Trans.buttons.contribute}}
+              </button>
+              <button class="btn btn-donate">
+                <img src="/static/img/heart-cog.svg" alt="" />
+                {{.Trans.buttons.donate}}
+=======
             <h2 class="section-title">Get Involved</h2>
             <p class="contribute-description">
               Librebucket is made by many motivated people, and we are looking
@@ -126,6 +250,7 @@
               <button class="btn btn-donate">
                 <img src="/static/components/img/heart-cog.svg" alt="" />
                 Donate
+>>>>>>> main
               </button>
             </div>
           </section>
@@ -134,6 +259,23 @@
       <footer class="footer">
         <div class="footer-content">
           <div class="footer-left">
+<<<<<<< HEAD
+            <p>{{.Trans.footer.version}}: {{.AppVersion}}</p>
+            <p>{{.Trans.footer.running}}</p>
+            <p>
+              {{ index .Trans.footer.copyright 0 }}
+              {{ index .Trans.footer.copyright 1 }}
+            </p>
+            <p>{{.Trans.footer.credits}}</p>
+          </div>
+          <div class="footer-right">
+            <a href="https://example.com">{{.Trans.footer.licenses}}</a>
+            <a href="https://example.com"
+              ><img src="/static/img/api.svg" alt="API"
+            /></a>
+            <a href="https://example.com"
+              ><img src="/static/img/github.svg" alt="GitHub"
+=======
             <p>Version: {{.AppVersion}}</p>
             <p>This home page is running on Librebucket</p>
             <p>
@@ -149,6 +291,7 @@
             /></a>
             <a href="https://example.com"
               ><img src="/static/components/img/github.svg" alt=""
+>>>>>>> main
             /></a>
           </div>
         </div>
