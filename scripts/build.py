@@ -57,7 +57,12 @@ def build(goos, goarch):
 
     log("info", f"Building {goos}/{goarch}")
     try:
-        run_cmd(["go", "build", "-o", binary_path, SOURCE_FILE], cwd=os.getcwd())
+        subprocess.run(
+            ["go", "build", "-o", binary_path, SOURCE_FILE],
+            check=True,
+            cwd=os.getcwd(),
+            env=env,
+        )
         log("info", f"Built binary → {binary_path}")
     except subprocess.CalledProcessError:
         log("error", f"Failed building {goos}/{goarch}")
