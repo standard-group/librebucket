@@ -1,0 +1,77 @@
+site_name: Librebucket Documentation
+site_description: A lightweight, self-hosted Git server with a clean web interface
+site_url: https://standard-group.github.io/librebucket/
+repo_url: https://github.com/standard-group/librebucket
+repo_name: standard-group/librebucket
+
+theme:
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+  - mkdocstrings
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quick-start.md
+    - Configuration: getting-started/configuration.md
+  - User Guide:
+    - Web Interface: user-guide/web-interface.md
+    - Repository Management: user-guide/repositories.md
+    - User Management: user-guide/users.md
+  - API Reference:
+    - Overview: api/overview.md
+    - Authentication: api/authentication.md
+    - Users: api/users.md
+    - Repositories: api/repositories.md
+    - Commits: api/commits.md
+  - Development:
+    - Contributing: development/contributing.md
+    - Building: development/building.md
+    - Testing: development/testing.md
+  - Deployment:
+    - Self-Hosting: deployment/self-hosting.md
+    - Docker: deployment/docker.md
+    - Reverse Proxy: deployment/reverse-proxy.md
+  - About:
+    - License: about/license.md
+    - Changelog: about/changelog.md
